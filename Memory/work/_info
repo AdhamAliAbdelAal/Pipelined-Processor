@@ -1,0 +1,120 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dD:/subjects/3-1/VLSI/Mini 1/Final Project/Eslam/Carry_Save_Adder/code
+vEX_MEM
+Z0 !s110 1668634356
+!i10b 1
+!s100 ?:BaiC2U=mI=Al:2J;n8?3
+IdNmY=gH8TGbUdaI7AB1F00
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dD:/subjects/3-1/Compuer arch/project/Memory
+w1668630651
+8D:\subjects\3-1\Compuer arch\project\Memory\EX_MEM.v
+FD:\subjects\3-1\Compuer arch\project\Memory\EX_MEM.v
+L0 2
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1668634356.000000
+!s107 D:\subjects\3-1\Compuer arch\project\Memory\EX_MEM.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:\subjects\3-1\Compuer arch\project\Memory\EX_MEM.v|
+!i113 1
+Z5 o-work work
+Z6 tCvgOpt 0
+n@e@x_@m@e@m
+vMEM_Out
+R0
+!i10b 1
+!s100 NR<z0e;4jcfAVe4?_<_KV1
+I<H[]]C`T6dH5WE;15:AMn3
+R1
+R2
+w1668622111
+8D:/subjects/3-1/Compuer arch/project/Memory/MEM_Out.v
+FD:/subjects/3-1/Compuer arch/project/Memory/MEM_Out.v
+L0 2
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/subjects/3-1/Compuer arch/project/Memory/MEM_Out.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/subjects/3-1/Compuer arch/project/Memory/MEM_Out.v|
+!i113 1
+R5
+R6
+n@m@e@m_@out
+vMEM_TB
+R0
+!i10b 1
+!s100 602@NYd>f1bcLQ]`Yk;WX2
+INg52@?HQmUh::TPiiQlOZ1
+R1
+R2
+w1668634351
+8D:/subjects/3-1/Compuer arch/project/Memory/MEM_TB.v
+FD:/subjects/3-1/Compuer arch/project/Memory/MEM_TB.v
+L0 2
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/subjects/3-1/Compuer arch/project/Memory/MEM_TB.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/subjects/3-1/Compuer arch/project/Memory/MEM_TB.v|
+!i113 1
+R5
+R6
+n@m@e@m_@t@b
+vMemory
+R0
+!i10b 1
+!s100 ccN<9bOI`CD7FOYgA;oR`3
+ISgWe0TIW;gaU:`dEJ`CAa2
+R1
+R2
+w1668633239
+8D:/subjects/3-1/Compuer arch/project/Memory/Memory.v
+FD:/subjects/3-1/Compuer arch/project/Memory/Memory.v
+L0 2
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/subjects/3-1/Compuer arch/project/Memory/Memory.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/subjects/3-1/Compuer arch/project/Memory/Memory.v|
+!i113 1
+R5
+R6
+n@memory
+vMux_WB
+R0
+!i10b 1
+!s100 4@hK<QWSh]7aAo0>3fMVj1
+Id;P59UO9MX:o_FHb[lEEE0
+R1
+R2
+w1668625411
+8D:/subjects/3-1/Compuer arch/project/Memory/Mux_WB.v
+FD:/subjects/3-1/Compuer arch/project/Memory/Mux_WB.v
+L0 1
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/subjects/3-1/Compuer arch/project/Memory/Mux_WB.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/subjects/3-1/Compuer arch/project/Memory/Mux_WB.v|
+!i113 1
+R5
+R6
+n@mux_@w@b
