@@ -1,8 +1,7 @@
-module CU (In,clk, WB, Alu, MR, MW, AluOp,Imm);
-input clk;
+module CU (In, WB, Alu, MR, MW, AluOp,Imm);
 input [2:0] In; 
 output reg WB, Alu, MR, MW, AluOp,Imm;
-always @(posedge clk )begin
+always@(*) begin
 //load immediate
 if(In == 3'b001)begin
 {WB, Imm} = 2'b11;
