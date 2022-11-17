@@ -12,7 +12,7 @@ output [15:0] read_data2; //Data2
 reg [15:0] registers[0:7];
 
 /*Sync*/
-always@(posedge clk)
+always@(negedge clk)
 begin
 if(write_back) 
 	registers[write_addr] = write_data;

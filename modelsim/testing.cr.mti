@@ -1,48 +1,61 @@
-D:/CMP/CMP5/Arch/project/Codes/Processor.v {2 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/Processor.v
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module ID_EX
--- Compiling module ExecutionUnit
--- Compiling module EX_MEM
--- Compiling module RegFile
--- Compiling module Mux2inputs
--- Compiling module DecodingStage
-** Warning: ** while parsing file included at D:/CMP/CMP5/Arch/project/Codes/Processor.v(5)
-** while parsing file included at D:\CMP\CMP5\Arch\project\Codes\DecodingStage.v(2)
-** at D:\CMP\CMP5\Arch\project\Codes\RegFile.v(1): (vlog-2275) 'RegFile' already exists and will be overwritten.
--- Compiling module RegFile
-** Warning: ** while parsing file included at D:/CMP/CMP5/Arch/project/Codes/Processor.v(5)
-** while parsing file included at D:\CMP\CMP5\Arch\project\Codes\DecodingStage.v(3)
-** at D:\CMP\CMP5\Arch\project\Codes\Mux2Inputs.v(1): (vlog-2275) 'Mux2inputs' already exists and will be overwritten.
--- Compiling module Mux2inputs
-** Warning: ** while parsing file included at D:/CMP/CMP5/Arch/project/Codes/Processor.v(5)
-** at D:\CMP\CMP5\Arch\project\Codes\DecodingStage.v(5): (vlog-2275) 'DecodingStage' already exists and will be overwritten.
--- Compiling module DecodingStage
--- Compiling module CU
--- Compiling module Processor
-
-Top level modules:
-	Processor
-
-} {} {}} D:/CMP/CMP5/Arch/project/Codes/CU.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/CU.v
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module CU
-
-Top level modules:
-	CU
-
-} {} {}} D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v
+D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 -- Compiling module ExecutionUnit
 
 Top level modules:
 	ExecutionUnit
 
-} {} {}} D:/CMP/CMP5/Arch/project/Codes/ID_EX.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/ID_EX.v
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/MEM_TB.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/MEM_TB.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module ID_EX
+-- Compiling module MEM_TB
 
 Top level modules:
-	ID_EX
+	MEM_TB
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/CU_tb.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/CU_tb.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module CU_tb
+
+Top level modules:
+	CU_tb
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/RegFile.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/RegFile.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module RegFile
+
+Top level modules:
+	RegFile
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/TB.v {2 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/TB.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module ID_EX
+** Warning: D:/CMP/CMP5/Arch/project/Codes/TB.v(1): (vlog-2283) Extra semicolon in $unit (global) scope.
+-- Compiling module ExecutionUnit
+** Warning: D:/CMP/CMP5/Arch/project/Codes/TB.v(2): (vlog-2283) Extra semicolon in $unit (global) scope.
+-- Compiling module EX_MEM
+** Warning: D:/CMP/CMP5/Arch/project/Codes/TB.v(3): (vlog-2283) Extra semicolon in $unit (global) scope.
+-- Compiling module TB
+
+Top level modules:
+	TB
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/Memory.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/Memory.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module Memory
+
+Top level modules:
+	Memory
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/MemoryUnit.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/MemoryUnit.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module Mux_WB
+-- Compiling module MEM_WB
+-- Compiling module Memory
+-- Compiling module MemoryUnit
+
+Top level modules:
+	MEM_WB
+	MemoryUnit
 
 } {} {}} D:/CMP/CMP5/Arch/project/Codes/DecodingStage.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/DecodingStage.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
@@ -53,19 +66,12 @@ Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  
 Top level modules:
 	DecodingStage
 
-} {} {}} D:/CMP/CMP5/Arch/project/Codes/RegFile.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/RegFile.v
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/MEM_WB.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/MEM_WB.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module RegFile
+-- Compiling module MEM_WB
 
 Top level modules:
-	RegFile
-
-} {} {}} D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module EX_MEM
-
-Top level modules:
-	EX_MEM
+	MEM_WB
 
 } {} {}} D:/CMP/CMP5/Arch/project/Codes/Mux2Inputs.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/Mux2Inputs.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
@@ -73,6 +79,34 @@ Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  
 
 Top level modules:
 	Mux2inputs
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/CU.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/CU.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module CU
+
+Top level modules:
+	CU
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/ID_EX.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/ID_EX.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module ID_EX
+
+Top level modules:
+	ID_EX
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/Mux_WB.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/Mux_WB.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module Mux_WB
+
+Top level modules:
+	Mux_WB
+
+} {} {}} D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module EX_MEM
+
+Top level modules:
+	EX_MEM
 
 } {} {}} D:/CMP/CMP5/Arch/project/Codes/IF_ID.v {1 {vlog -work work -stats=none D:/CMP/CMP5/Arch/project/Codes/IF_ID.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016

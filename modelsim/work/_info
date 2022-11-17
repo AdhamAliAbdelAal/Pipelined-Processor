@@ -9,117 +9,139 @@ z2
 cModel Technology
 dD:/CMP/CMP3/Microprocessors/Quartuz/setup
 vCU
-Z0 !s110 1668692952
+Z0 !s110 1668702039
 !i10b 1
 !s100 ?6[<SDX;[k4R^:5bkl0163
-IhEL17Tze3:YoR8=mz<kLZ2
+I9M[@Fc8me05bMTabiz>331
 Z1 VDg1SIo80bB@j0V0VzS_@n1
 Z2 dD:/CMP/CMP5/Arch/project/modelsim
 w1668686534
-8D:/CMP/CMP5/Arch/project/Codes/CU.v
-FD:/CMP/CMP5/Arch/project/Codes/CU.v
+8D:\CMP\CMP5\Arch\project\Codes\CU.v
+FD:\CMP\CMP5\Arch\project\Codes\CU.v
 L0 1
 Z3 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z4 !s108 1668692952.000000
-!s107 D:/CMP/CMP5/Arch/project/Codes/CU.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/CU.v|
+Z4 !s108 1668702039.000000
+Z5 !s107 D:\CMP\CMP5\Arch\project\Codes\Memory.v|D:\CMP\CMP5\Arch\project\Codes\MEM_WB.v|D:\CMP\CMP5\Arch\project\Codes\Mux_WB.v|D:\CMP\CMP5\Arch\project\Codes\MemoryUnit.v|D:\CMP\CMP5\Arch\project\Codes\CU.v|D:\CMP\CMP5\Arch\project\Codes\Mux2Inputs.v|D:\CMP\CMP5\Arch\project\Codes\RegFile.v|D:\CMP\CMP5\Arch\project\Codes\DecodingStage.v|D:\CMP\CMP5\Arch\project\Codes\EX_MEM.v|D:\CMP\CMP5\Arch\project\Codes\ExecutionUnit.v|D:\CMP\CMP5\Arch\project\Codes\ID_EX.v|D:/CMP/CMP5/Arch/project/Codes/Processor.v|
+Z6 !s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/Processor.v|
 !i113 1
-Z5 o-work work
-Z6 tCvgOpt 0
+Z7 o-work work
+Z8 tCvgOpt 0
 n@c@u
+vCU_tb
+!s110 1668702038
+!i10b 1
+!s100 ?;UcbfRUPcTbKb82VR_eH2
+I63jP_^e?S<U3mUTmlP>fT1
+R1
+R2
+w1668682010
+8D:/CMP/CMP5/Arch/project/Codes/CU_tb.v
+FD:/CMP/CMP5/Arch/project/Codes/CU_tb.v
+L0 3
+R3
+r1
+!s85 0
+31
+!s108 1668702038.000000
+!s107 D:/CMP/CMP5/Arch/project/Codes/CU_tb.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/CU_tb.v|
+!i113 1
+R7
+R8
+n@c@u_tb
 vDecodingStage
 R0
 !i10b 1
 !s100 Q=AFOn>Rnjd]M^gYn<hX^3
-I7jEmaLnm=o=[fUn0;W_nO0
+I6Z?BNDG<7dl<5izD3V15a3
 R1
 R2
 w1668685000
-8D:/CMP/CMP5/Arch/project/Codes/DecodingStage.v
-FD:/CMP/CMP5/Arch/project/Codes/DecodingStage.v
+8D:\CMP\CMP5\Arch\project\Codes\DecodingStage.v
+FD:\CMP\CMP5\Arch\project\Codes\DecodingStage.v
 L0 5
 R3
 r1
 !s85 0
 31
 R4
-!s107 D:\CMP\CMP5\Arch\project\Codes\Mux2Inputs.v|D:\CMP\CMP5\Arch\project\Codes\RegFile.v|D:/CMP/CMP5/Arch/project/Codes/DecodingStage.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/DecodingStage.v|
-!i113 1
 R5
 R6
+!i113 1
+R7
+R8
 n@decoding@stage
 vEX_MEM
-Z7 !s110 1668692953
+R0
 !i10b 1
 !s100 =KIAYXKR^XA9eK]WaX32@2
-IAL:G_=3?Bg5cBBDN;h^W@1
+IjTBdgGTOLVk:94UKTOAhY2
 R1
 R2
 w1668688041
-8D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v
-FD:/CMP/CMP5/Arch/project/Codes/EX_MEM.v
+8D:\CMP\CMP5\Arch\project\Codes\EX_MEM.v
+FD:\CMP\CMP5\Arch\project\Codes\EX_MEM.v
 L0 2
 R3
 r1
 !s85 0
 31
-Z8 !s108 1668692953.000000
-!s107 D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/EX_MEM.v|
+R4
+Z9 !s107 D:\CMP\CMP5\Arch\project\Codes\EX_MEM.v|D:\CMP\CMP5\Arch\project\Codes\ExecutionUnit.v|D:\CMP\CMP5\Arch\project\Codes\ID_EX.v|D:/CMP/CMP5/Arch/project/Codes/TB.v|
+Z10 !s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/TB.v|
 !i113 1
-R5
-R6
+R7
+R8
 n@e@x_@m@e@m
 vExecutionUnit
-R7
+R0
 !i10b 1
 !s100 ]6^E_^RVTT<V`7DOWnSS=0
-Ig@i8c3?]0O>Q]LSRKiz1=3
+Ig`H9^Y2YZaNSLO@bLcnQo3
 R1
 R2
 w1668610148
-8D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v
-FD:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v
+8D:\CMP\CMP5\Arch\project\Codes\ExecutionUnit.v
+FD:\CMP\CMP5\Arch\project\Codes\ExecutionUnit.v
 L0 1
 R3
 r1
 !s85 0
 31
-R8
-!s107 D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/ExecutionUnit.v|
+R4
+R9
+R10
 !i113 1
-R5
-R6
+R7
+R8
 n@execution@unit
 vID_EX
-R7
+R0
 !i10b 1
 !s100 cNi6[eh6]LHLXEkLURcBT0
-Izln:kAS@C>Nh9]lTLJClJ2
+I7mN1JiX2XOX@F8^ocbk9X3
 R1
 R2
 w1668687898
-8D:/CMP/CMP5/Arch/project/Codes/ID_EX.v
-FD:/CMP/CMP5/Arch/project/Codes/ID_EX.v
+8D:\CMP\CMP5\Arch\project\Codes\ID_EX.v
+FD:\CMP\CMP5\Arch\project\Codes\ID_EX.v
 L0 2
 R3
 r1
 !s85 0
 31
-R8
-!s107 D:/CMP/CMP5/Arch/project/Codes/ID_EX.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/ID_EX.v|
+R4
+R9
+R10
 !i113 1
-R5
-R6
+R7
+R8
 n@i@d_@e@x
 vIF_ID
-R7
+R0
 !i10b 1
 !s100 5oWMPfC?aM2TNQhJ5f0QQ3
 IE<H8:FLCIbH[Qf1>5BO9k2
@@ -133,65 +155,175 @@ R3
 r1
 !s85 0
 31
-R8
+R4
 !s107 D:/CMP/CMP5/Arch/project/Codes/IF_ID.v|
 !s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/IF_ID.v|
 !i113 1
-R5
-R6
-n@i@f_@i@d
-vMux2inputs
 R7
-!i10b 1
-!s100 >Yz:QQ;E6j;z4maX05hTG0
-I>[XjHJ_]P;F_2P6?9NS<93
-R1
-R2
-w1668684991
-8D:/CMP/CMP5/Arch/project/Codes/Mux2Inputs.v
-FD:/CMP/CMP5/Arch/project/Codes/Mux2Inputs.v
-L0 1
-R3
-r1
-!s85 0
-31
 R8
-!s107 D:/CMP/CMP5/Arch/project/Codes/Mux2Inputs.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/Mux2Inputs.v|
-!i113 1
-R5
-R6
-n@mux2inputs
-vProcessor
+n@i@f_@i@d
+vMEM_TB
 R0
 !i10b 1
-!s100 U9c0;Nk`kElO^QR<bFHE02
-Idb=[I5^1OleIADcI3?Z_51
+!s100 602@NYd>f1bcLQ]`Yk;WX2
+IfckQgGgBL_bk<m?oa5SZ<0
 R1
 R2
-w1668692944
-8D:/CMP/CMP5/Arch/project/Codes/Processor.v
-FD:/CMP/CMP5/Arch/project/Codes/Processor.v
-L0 7
+Z11 w1668682510
+8D:/CMP/CMP5/Arch/project/Codes/MEM_TB.v
+FD:/CMP/CMP5/Arch/project/Codes/MEM_TB.v
+L0 2
 R3
 r1
 !s85 0
 31
 R4
-!s107 D:\CMP\CMP5\Arch\project\Codes\CU.v|D:\CMP\CMP5\Arch\project\Codes\Mux2Inputs.v|D:\CMP\CMP5\Arch\project\Codes\RegFile.v|D:\CMP\CMP5\Arch\project\Codes\DecodingStage.v|D:\CMP\CMP5\Arch\project\Codes\EX_MEM.v|D:\CMP\CMP5\Arch\project\Codes\ExecutionUnit.v|D:\CMP\CMP5\Arch\project\Codes\ID_EX.v|D:/CMP/CMP5/Arch/project/Codes/Processor.v|
-!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/Processor.v|
+!s107 D:/CMP/CMP5/Arch/project/Codes/MEM_TB.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/MEM_TB.v|
 !i113 1
-R5
-R6
-n@processor
-vRegFile
 R7
+R8
+n@m@e@m_@t@b
+vMEM_WB
+R0
 !i10b 1
-!s100 BK37RJT>oNI_C?[iXR`3A2
-IoFZPS60Be7Who]RV:YBmF0
+!s100 4<]``;;8<Zm1h>e?fIGfa2
+IQIconGY@?GOcNLl=l@:^m1
 R1
 R2
-w1668685783
+w1668701756
+8D:\CMP\CMP5\Arch\project\Codes\MEM_WB.v
+FD:\CMP\CMP5\Arch\project\Codes\MEM_WB.v
+L0 2
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8
+n@m@e@m_@w@b
+vMemory
+R0
+!i10b 1
+!s100 :]G=Mi<hdgfaZfh>05o6P2
+I`n<FHE4SH?zAUkWN^GDPQ2
+R1
+R2
+w1668700049
+8D:\CMP\CMP5\Arch\project\Codes\Memory.v
+FD:\CMP\CMP5\Arch\project\Codes\Memory.v
+L0 2
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8
+n@memory
+vMemoryUnit
+R0
+!i10b 1
+!s100 kfc<1U7EkJ=[3SbPnf=W83
+Ii@>H^bnGW^m:7lgf0^0Dj1
+R1
+R2
+w1668698221
+8D:\CMP\CMP5\Arch\project\Codes\MemoryUnit.v
+FD:\CMP\CMP5\Arch\project\Codes\MemoryUnit.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8
+n@memory@unit
+vMux2inputs
+R0
+!i10b 1
+!s100 >Yz:QQ;E6j;z4maX05hTG0
+IZ`^fgN7PDC?meGOnXhW;>0
+R1
+R2
+w1668684991
+8D:\CMP\CMP5\Arch\project\Codes\Mux2Inputs.v
+FD:\CMP\CMP5\Arch\project\Codes\Mux2Inputs.v
+L0 1
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8
+n@mux2inputs
+vMux_WB
+R0
+!i10b 1
+!s100 4@hK<QWSh]7aAo0>3fMVj1
+I5Em7k@Mc9?^kP;>zdl>YH1
+R1
+R2
+R11
+8D:\CMP\CMP5\Arch\project\Codes\Mux_WB.v
+FD:\CMP\CMP5\Arch\project\Codes\Mux_WB.v
+L0 1
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8
+n@mux_@w@b
+vProcessor
+R0
+!i10b 1
+!s100 `3Ohz3QXNOZHF5I0ob_Rh0
+I7`zOQV9STVJHjUB[43W[B2
+R1
+R2
+w1668702018
+8D:/CMP/CMP5/Arch/project/Codes/Processor.v
+FD:/CMP/CMP5/Arch/project/Codes/Processor.v
+L0 9
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8
+n@processor
+vRegFile
+R0
+!i10b 1
+!s100 2UZBnJn1m>NoEJLdzRdgU1
+I^ZWKXZiRD>;nfi`RKG_L=2
+R1
+R2
+w1668701775
 8D:/CMP/CMP5/Arch/project/Codes/RegFile.v
 FD:/CMP/CMP5/Arch/project/Codes/RegFile.v
 L0 1
@@ -199,10 +331,32 @@ R3
 r1
 !s85 0
 31
-R8
+R4
 !s107 D:/CMP/CMP5/Arch/project/Codes/RegFile.v|
 !s90 -reportprogress|300|-work|work|-stats=none|D:/CMP/CMP5/Arch/project/Codes/RegFile.v|
 !i113 1
-R5
-R6
+R7
+R8
 n@reg@file
+vTB
+R0
+!i10b 1
+!s100 k6oAmo9XgcO^;3XIBVLLO1
+I1_j=9jNR=NC[V2L;EjmzS3
+R1
+R2
+w1668612351
+8D:/CMP/CMP5/Arch/project/Codes/TB.v
+FD:/CMP/CMP5/Arch/project/Codes/TB.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+R9
+R10
+!i113 1
+R7
+R8
+n@t@b
