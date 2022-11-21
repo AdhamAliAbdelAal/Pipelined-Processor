@@ -2,9 +2,9 @@
 module IF_ID(
     DataIn, Buffer, clk
 );
-    input [31:0] DataIn;
+    input [15:0] DataIn;
     input clk;
-    output reg [31:0] Buffer;
+    output reg [15:0] Buffer;
     always @(posedge clk) begin
         Buffer = DataIn;
     end

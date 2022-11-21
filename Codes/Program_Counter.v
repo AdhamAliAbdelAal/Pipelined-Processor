@@ -9,7 +9,7 @@ begin
 PC_Out = {{26{1'b0}},6'b10_0000};
 end
 else begin
-PC_Out=PC_Out +2;
+PC_Out=PC_Out + 1;
 end
 end
 
