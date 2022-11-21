@@ -31,14 +31,13 @@ module Processor();
     wire [40:0] ID_EX_input;
     wire [40:0] IDEXBuffer;
 
-    wire [69:0] EX_MEM_input;
-    wire [69:0] EXMEMBuffer;
+    wire [53:0] EX_MEM_input;
+    wire [53:0] EXMEMBuffer;
 
     wire [19:0] MEM_WB_input;
     wire [19:0] MEMWBBuffer;
 
     reg clk;
-
 
     wire [31:0] PC_OUT;
 
@@ -68,7 +67,7 @@ module Processor();
 
     /*Execution Unit*/
     ExecutionUnit EXUNIT (.ALU(IDEXBuffer[33]), .ALUOperation(IDEXBuffer[32]), .Data1(IDEXBuffer[31:16]),
-    .Data2((IDEXBuffer[40]==1'b0)?IDEXBuffer[15:0]:IFIDBuffer), .DataOut(EX_MEM_input[63:32]), .Address(EX_MEM_input[31:0]));
+    .Data2((IDEXBuffer[40]==1'b0)?IDEXBuffer[15:0]:IFIDBuffer), .DataOut(EX_MEM_input[47:32]), .Address(EX_MEM_input[31:0]));
 
     /*EX/MEM Buffer*/
     EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk));
@@ -79,9 +78,9 @@ module Processor();
     /*MEM/WB Buffer*/
     MEM_WB MEMWB(.DataIn(MEM_WB_input), .Buffer(MEMWBBuffer), .clk(clk));
 
-    assign EX_MEM_input[66:64] = IDEXBuffer[36:34];
+    assign EX_MEM_input[50:48] = IDEXBuffer[36:34];
     assign ID_EX_input[39:37]=IFIDBuffer[7:5];
-    assign EX_MEM_input[69:67]=IDEXBuffer[39:37];
+    assign EX_MEM_input[53:51]=IDEXBuffer[39:37];
 
     initial begin
         $monitor("IFIDBuffer=%b,IDEXBuffer=%b,EXMEMBuffer=%b,MEMWBBuffer=%b",IFIDBuffer,IDEXBuffer,EXMEMBuffer,MEMWBBuffer);
