@@ -6,7 +6,11 @@ module ID_EX(
     input clk;
     output reg [40:0] Buffer;
     always @(posedge clk) begin
-        //Buffer = (Buffer[40]==1'b1) ? 41'd0 : DataIn;
-        Buffer = DataIn;
+        if(Buffer[40]==1'b1) begin
+            Buffer<=41'd0;
+        end
+        else begin
+            Buffer<=DataIn;
+        end
     end
 endmodule
