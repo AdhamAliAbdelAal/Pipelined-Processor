@@ -166,7 +166,23 @@ module Processor();
         Instruction={8'b10101000,3'b111,3'b001,2'b00};
         #MEMDELAY
 
+        /*LDM R6,65535*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b00101000,3'b110,3'b000,2'b00};
+        #MEMDELAY
+        Write_Address=Write_Address+1;
+        Instruction=16'd65535;
+        #MEMDELAY
 
+        /*NOP*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10101000,3'b110,3'b110,2'b00};
+        #MEMDELAY
+
+        /*NOP*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10101000,3'b110,3'b110,2'b00};
+        #MEMDELAY
 
         Write_Enable=1'b0;
 
