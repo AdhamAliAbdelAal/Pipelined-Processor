@@ -100,11 +100,6 @@ module Processor();
         Instruction={8'b10101000,3'b000,3'b000,2'b00};
         #MEMDELAY
 
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b000,3'b000,2'b00};
-        #MEMDELAY
-
         /*LDM R7,13*/
         Write_Address=Write_Address+1;
         Instruction={8'b00101000,3'b111,3'b000,2'b00};
@@ -113,11 +108,6 @@ module Processor();
         Instruction=16'd13;
         #MEMDELAY
         
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b111,3'b111,2'b00};
-        #MEMDELAY
-
         /*NOP*/
         Write_Address=Write_Address+1;
         Instruction={8'b10101000,3'b111,3'b111,2'b00};
