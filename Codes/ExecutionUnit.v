@@ -1,42 +1,53 @@
-/*ID/EX Buffer*/
+/*ID/EX Buffer 192 bit*/
 /*
-1: IOR
-1: IOW
-1: OPS
-3: ALU_OP  
-1: ALU
-2: FD
-16: Data1
-16: Data2
-3: WB_Address
-1: MR
-1: MW
-1: WB
-1: JMP
-1: SP
-1: SPOP
-2: FGS
-32: PC
-1: JWSP
-3: SRC_Address
-1: IMM
-1: Stack_PC
-1: Stack_Flags
-16: Immediate_Value
+1: IOR                                |  0 
+1: IOW                                |  1
+1: OPS                                |  2
+3: ALU_OP                             |  5:3
+1: ALU                                |  6
+2: FD                                 |  8:7
+16: Data1                             |  24:9
+16: Data2                             |  40:25
+3: WB_Address                         |  43:41
+1: MR                                 |  44
+1: MW                                 |  45
+1: WB                                 |  46
+1: JMP                                |  47
+1: SP                                 |  48
+1: SPOP                               |  49
+2: FGS                                |  51:50
+32: PC                                |  83:52
+1: JWSP                               |  84
+3: SRC_Address                        |  87:85
+1: IMM                                |  88
+1: Stack_PC                           |  89
+1: Stack_Flags                        |  90
+16: Immediate_Value                   |  106
+2: Forwarding_Unit_Selectors          |  108:107
+3: Flags                              |  111:109
+16: Data_From_Forwarding_Unit1        |  127:112
+16: Data_From_Forwarding_Unit2        |  143:128
+16: INPUT_PORT                        |  159:144
+32: Stack_Pointer                     |  191:160
 */
 
-/*EX/MEM Buffer*/
+/*EX/MEM Buffer 110*/
 /*
-32: Data
-3: WB_Address_Out
-1: MR_Out
-1: MW_Out
-1: WB_Out
-32: Address
-1: JWSP_Out
-1: Stack_PC_Out
-1: Stack_Flags_Out
+32: Data                    | 31:0
+3: WB_Address_Out           | 34:32         
+1: MR_Out                   | 35
+1: MW_Out                   | 36
+1: WB_Out                   | 37
+32: Address                 | 69:38
+1: JWSP_Out                 | 70
+1: Stack_PC_Out             | 71
+1: Stack_Flags_Out          | 72
+1: Taken_Jump               | 73
+1: To_PC_Selector           | 74
+3: Final_Flags              | 77:75
+32: Stack_Pointer_Out       | 109:78
 */
+
 
 module ExecutionUnit(
     /*Inputs From Buffer*/
@@ -176,6 +187,7 @@ module ExecutionUnit(
 
 
     assign To_PC_Selector = (Taken_Jump & !JWSP);
+
     /*Unchangable*/
     assign  {MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out}={MR,MW,WB,JWSP,Stack_PC,Stack_Flags};
 endmodule
