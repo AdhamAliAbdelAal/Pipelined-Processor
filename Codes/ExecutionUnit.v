@@ -1,4 +1,4 @@
-/*ID/EX Buffer 107 bit*/
+/*ID/EX Buffer 91 bit*/
 /*
 1: IOR                                |  0 
 1: IOW                                |  1
@@ -22,7 +22,6 @@
 1: IMM                                |  88
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
-16: Immediate_Value                   |  106:91
 */
 
 /*EX/MEM Buffer 76*/
@@ -91,7 +90,7 @@ module ExecutionUnit(
     /*Inputs*/
     input IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags;
     input [1:0] FD,FGS,Forwarding_Unit_Selectors;
-    input [2:0] ALU_OP,WB_Address,SRC_Address,Flags;
+    input [2:0] ALU_OP,WB_Address,SRC_Address,Flags,Flags_From_Memory;
     input [15:0] Data1,Data2,Immediate_Value,Data_From_Forwarding_Unit1,Data_From_Forwarding_Unit2,INPUT_PORT;
     input [31:0] PC, Stack_Pointer;
 
@@ -108,13 +107,13 @@ module ExecutionUnit(
 
 
     /* Level 1 */
-    assign Operand1= Forwarding_Unit_Selectors[0]==1'b1?Data_From_Forwarding_Unit1:Data1;
+    assign Operand1= (Forwarding_Unit_Selectors[0]==1'b1)?Data_From_Forwarding_Unit1:Data1;
 
-    assign Immediate_Or_Register= IMM==1'b1?Immediate_Value:Data2;
+    assign Immediate_Or_Register= (IMM==1'b1)?Immediate_Value:Data2;
 
-    assign Data_Or_One= Forwarding_Unit_Selectors[1]==1'b1?Data_From_Forwarding_Unit2:Immediate_Or_Register;
+    assign Data_Or_One= (Forwarding_Unit_Selectors[1]==1'b1)?Data_From_Forwarding_Unit2:Immediate_Or_Register;
 
-    assign Operand2= OPS==1'b1?16'd1:Data_Or_One;
+    assign Operand2= (OPS==1'b1)?16'd1:Data_Or_One;
 
 
     /* Level 2 */
@@ -149,7 +148,7 @@ module ExecutionUnit(
     
     assign Select_Flags_Or_From_Memory= Stack_Flags & MR;
 
-    assign Final_Flags=Select_Flags_Or_From_Memory==1'b1?Flags_From_Memory:Flags_From_Decision;
+    assign Final_Flags=(Select_Flags_Or_From_Memory==1'b1)?Flags_From_Memory:Flags_From_Decision;
 
     
     /* Level 4 Data*/
@@ -166,15 +165,16 @@ module ExecutionUnit(
     
 
     /* Level 4 Address*/
-    assign SP_From_Adder_Subtractor = SPOP==1'b1? Stack_Pointer+32'd1: Stack_Pointer-32'd1;
+    assign SP_From_Adder_Subtractor = (SPOP==1'b1)? Stack_Pointer+32'd1: Stack_Pointer-32'd1;
 
-    assign Stack_Pointer_Out = SP==1'b1? SP_From_Adder_Subtractor: Stack_Pointer;
+    assign Stack_Pointer_Out = (SP==1'b1)? SP_From_Adder_Subtractor: Stack_Pointer;
 
-    assign Push_Or_Pop_Stack_Pointer = SPOP==1'b1? Stack_Pointer_Out: Stack_Pointer;
+    assign Push_Or_Pop_Stack_Pointer = (SPOP==1'b1)? Stack_Pointer_Out: Stack_Pointer;
 
     assign Address = (SP==1'b1)? Push_Or_Pop_Stack_Pointer: 
-        (MR==1'b1)? {{16{1'b0}}, Operand2}:           //Address = Src in Case of Load
-        (MR==1'b0)? {{16{1'b0}}, Operand1};           //Address = Dst Otherwise
+        (MR==1'b1)? {{16{1'b0}}, Operand2}: {{16{1'b0}}, Operand1};          
+        // Address = Src in Case of Load 
+        // Address = Dst Otherwise
 
 
     assign To_PC_Selector = (Taken_Jump & !JWSP);

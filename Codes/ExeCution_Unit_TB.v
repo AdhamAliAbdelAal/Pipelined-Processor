@@ -1,7 +1,7 @@
 `include "ID_EX.v"
 `include "ExecutionUnit.v"
 `include "EX_MEM.v"
-/*ID/EX Buffer 107 bit*/
+/*ID/EX Buffer 91 bit*/
 /*
 1: IOR                                |  0 
 1: IOW                                |  1
@@ -25,7 +25,6 @@
 1: IMM                                |  88
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
-16: Immediate_Value                   |  106:91
 */
 
 /*EX/MEM Buffer 76*/
@@ -47,13 +46,14 @@ module Processor();
     localparam DELAY=2*CLK;
     localparam MEMDELAY=5;
 
-    wire [140:0] ID_EX_input;
-    wire [140:0] IDEXBuffer;
+    reg [90:0] ID_EX_input;
+    wire [90:0] IDEXBuffer;
 
     wire [75:0] EX_MEM_input;
     wire [75:0] EXMEMBuffer;
 
     reg clk;
+    reg [15:0] IF_Buffer;
     reg [2:0]Flags,Flags_From_Memory;
     reg [15:0] INPUT_PORT;
     reg [31:0] Stack_Pointer;
@@ -95,7 +95,7 @@ module Processor();
 
     .Data1(IDEXBuffer[24:9]),
     .Data2(IDEXBuffer[40:25]),
-    .Immediate_Value(IDEXBuffer[106:91]),
+    .Immediate_Value(IF_Buffer),
     .PC(IDEXBuffer[83:52]),
 
     /*Signals*/
@@ -127,7 +127,8 @@ module Processor();
     .Stack_PC_Out(EX_MEM_input[71]),
     .Stack_Flags_Out(EX_MEM_input[72]),
     .WB_Address_Out(EX_MEM_input[34:32]),
-    .Data(EX_MEM_input[31:0]),Address,
+    .Data(EX_MEM_input[31:0]),
+    .Address(EX_MEM_input[69:38]),
 
     /*Flags Outputs*/
     /*NF|CF|ZF*/
@@ -153,12 +154,12 @@ module Processor();
         Flags=3'b000;
         Flags_From_Memory=3'b000;
         INPUT_PORT=16'd12;
-        Stack_Pointe=32'd10;
+        Stack_Pointer=32'd10;
+        IF_Buffer=16'd12;
         ID_EX_input={16'd9,3'd0,3'b101,32'd15,5'd0,1'b1,2'd0,3'b111,16'd127,16'd10,2'b10,7'd0};
         clk=0;
 
-        #DELAY
-        
+        #DELAY;
     end
 
     always begin
