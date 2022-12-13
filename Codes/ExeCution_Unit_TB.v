@@ -50,21 +50,22 @@ module Processor();
     localparam DELAY=2*CLK;
     localparam MEMDELAY=5;
 
-    wire [40:0] ID_EX_input;
-    wire [40:0] IDEXBuffer;
+    wire [140:0] ID_EX_input;
+    wire [140:0] IDEXBuffer;
 
-    wire [53:0] EX_MEM_input;
-    wire [53:0] EXMEMBuffer;
+    wire [75:0] EX_MEM_input;
+    wire [75:0] EXMEMBuffer;
 
     reg clk;
     reg [2:0]Flags,Flags_From_Memory;
     reg [15:0] INPUT_PORT;
     reg [31:0] Stack_Pointer;
 
-    wire [2:0] Flags_Out;
+    wire [2:0] Flags_in;
     wire [31:0] Stack_Pointer_Out;
+    wire JMP,To_PC_Selector;
 
-    wire JMP;
+    assign Flags_in =EX_MEM_input[75:73];
 
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk));
@@ -132,7 +133,7 @@ module Processor();
 
     /*Flags Outputs*/
     /*NF|CF|ZF*/
-    .Final_Flags(Flags_Out),
+    .Final_Flags(EX_MEM_input[75:73]),
 
     /*Stack Pointer Out*/
     .Stack_Pointer_Out(Stack_Pointer_Out),
@@ -142,7 +143,7 @@ module Processor();
 
     /* Output Signals */
     /*PC Selectors*/
-    To_PC_Selector
+    .To_PC_Selector(To_PC_Selector)
 );
 
     /*EX/MEM Buffer*/
@@ -151,101 +152,12 @@ module Processor();
 
     initial begin
         $monitor("IDEXBuffer=%b,EXMEMBuffer=%b",IDEXBuffer,EXMEMBuffer);
-
-
-        /*LDM R0,15*/
-        Write_Address=32'd32;
-        Instruction={8'b00101000,3'b000,3'b000,2'b00};
-        #MEMDELAY
-        Write_Address=Write_Address+1;
-        Instruction=16'd15;
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b000,3'b000,2'b00};
-        #MEMDELAY
-
-        /*LDM R7,13*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00101000,3'b111,3'b000,2'b00};
-        #MEMDELAY
-        Write_Address=Write_Address+1;
-        Instruction=16'd13;
-        #MEMDELAY
-        
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b111,3'b111,2'b00};
-        #MEMDELAY
-
-        /*ADD R7,R0*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b01101000,3'b111,3'b000,2'b00};
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b000,3'b000,2'b00};
-        #MEMDELAY
-
-        /*LDM R1,0*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00101000,3'b001,3'b000,2'b00};
-        #MEMDELAY
-        Write_Address=Write_Address+1;
-        Instruction=16'd0;
-        #MEMDELAY
-
-        /*NOT R7*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10001000,3'b111,3'b111,2'b00};
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b000,3'b000,2'b00};
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b001,3'b001,2'b00};
-        #MEMDELAY
-
-        /*STD R1,R7*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b01001000,3'b001,3'b111,2'b00};
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b111,3'b001,2'b00};
-        #MEMDELAY
-
-        /*LDM R6,65535*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00101000,3'b110,3'b000,2'b00};
-        #MEMDELAY
-        Write_Address=Write_Address+1;
-        Instruction=16'd65535;
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b110,3'b110,2'b00};
-        #MEMDELAY
-
-        /*NOP*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10101000,3'b110,3'b110,2'b00};
-        #MEMDELAY
-
-        Write_Enable=1'b0;
-
-        reset=1'b1;
+        Flags=3'b000;
+        Flags_From_Memory=3'b000;
+        INPUT_PORT=16'd12;
+        Stack_Pointe=32'd10;
+        ID_EX_input={}
         clk=0;
-        #DELAY;
-        reset=1'b0;
     end
 
     always begin
