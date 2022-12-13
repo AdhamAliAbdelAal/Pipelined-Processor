@@ -13,6 +13,7 @@
 1: MW
 1: WB
 1: JMP
+1: SP
 1: SPOP
 2: FGS
 32: PC
@@ -39,7 +40,7 @@
 
 module ExecutionUnit(
     /*Inputs From Buffer*/
-    IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags,
+    IOR,IOW,OPS,ALU,MR,MW,WB,JMP, SP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags,
     FD,FGS,
     ALU_OP,WB_Address,SRC_Address,
     Data1,Data2,Immediate_Value,
@@ -63,6 +64,9 @@ module ExecutionUnit(
     /*Input Port*/
     INPUT_PORT,
 
+    /*Stack Pointer*/
+    Stack_Pointer,
+
     /*Outputs*/
     MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out,
     WB_Address_Out,
@@ -70,24 +74,35 @@ module ExecutionUnit(
 
     /*Flags Outputs*/
     /*NF|CF|ZF*/
-    Flags_Out,
+    Final_Flags,
+
+    /*Stack Pointer Out*/
+    Stack_Pointer_Out,
+
+    /*For Jumps*/
+    Taken_Jump, 
+
+    /* Output Signals */
+    /*PC Selectors*/
+    To_PC_Selector
 );  
     /*Inputs*/
-    input IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags;
+    input IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags;
     input [1:0] FD,FGS,Forwarding_Unit_Selectors;
     input [2:0] ALU_OP,WB_Address,SRC_Address,Flags;
     input [15:0] Data1,Data2,Immediate_Value,Data_From_Forwarding_Unit1,Data_From_Forwarding_Unit2,INPUT_PORT;
-    input [31:0] PC;
+    input [31:0] PC, Stack_Pointer;
 
     /*Outputs*/
-    output MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out;
-    output [2:0] WB_Address_Out,Flags_Out;
-    output [31:0] Data,Address;
+    output MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out, Taken_Jump, To_PC_Selector;
+    output [2:0] WB_Address_Out,Final_Flags;
+    output [31:0] Data,Address, Stack_Pointer_Out;
 
     /*Connections*/
+    wire Temp_CF,Select_Flags_Or_From_Memory, Jump_On_Which_Flag;
+    wire [2:0] Flags_From_Decision,Flags_Out;
     wire [15:0] Operand1,Operand2,Immediate_Or_Register,Data_Or_One,Data_From_ALU,Data_To_Use;
-    wire [2:0] Flags_From_Decision,Final_Flags;
-    wire Temp_CF,Select_Flags_Or_From_Memory;
+    wire [31:0] SP_From_Adder_Subtractor, Push_Or_Pop_Stack_Pointer;
 
 
     /* Level 1 */
@@ -134,6 +149,33 @@ module ExecutionUnit(
 
     assign Final_Flags=Select_Flags_Or_From_Memory==1'b1?Flags_From_Memory:Flags_From_Decision;
 
+    
+    /* Level 4 Data*/
+
+    /*NF|CF|ZF*/
+    assign Jump_On_Which_Flag = (FGS==2'd0)? Flags[0]:
+        (FGS==2'd1)? Flags[2]:
+        (FGS==2'd2)? Flags[1]: 1'b1;
+    
+    assign Taken_Jump = Jump_On_Which_Flag & JMP;
+
+
+    assign Data =  (Taken_Jump & SP)? PC: {{16{1'b0}},Data_To_Use}; 
+    
+
+    /* Level 4 Address*/
+    assign SP_From_Adder_Subtractor = SPOP==1'b1? Stack_Pointer+32'd1: Stack_Pointer-32'd1;
+
+    assign Stack_Pointer_Out = SP==1'b1? SP_From_Adder_Subtractor: Stack_Pointer;
+
+    assign Push_Or_Pop_Stack_Pointer = SPOP==1'b1? Stack_Pointer_Out: Stack_Pointer;
+
+    assign Address = (SP==1'b1)? Push_Or_Pop_Stack_Pointer: 
+        (MR==1'b1)? {{16{1'b0}}, Operand2}:           //Address = Src in Case of Load
+        (MR==1'b0)? {{16{1'b0}}, Operand1};           //Address = Dst Otherwise
+
+
+    assign To_PC_Selector = (Taken_Jump & !JWSP);
     /*Unchangable*/
     assign  {MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out}={MR,MW,WB,JWSP,Stack_PC,Stack_Flags};
 endmodule
