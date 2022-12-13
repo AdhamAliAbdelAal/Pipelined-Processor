@@ -164,6 +164,20 @@ module Processor();
         clk=0;
 
         #DELAY;
+        /*ADD*/
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd7,2'b10,1'b1,3'd0,3'd0};
+
+        #DELAY;
+
+        /*SUB*/
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd23,2'b10,1'b1,3'd0,3'd0};
+
+        #DELAY;
+
+        /*AND*/
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'b1010,16'b0101,2'b10,1'b1,3'd2,3'd0};
+
+        #DELAY;
     end
 
     always begin
