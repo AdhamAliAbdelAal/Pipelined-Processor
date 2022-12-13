@@ -1,0 +1,9 @@
+state machine ----> eslam & khaled
+memory unit -----> eslam & khaled
+control unit ----> eslam & khaled
+
+execution unit----> walid & adham
+load use case  ----> walid
+full forwarding -----> adham
+
+next saturday ---> control unti & execution
