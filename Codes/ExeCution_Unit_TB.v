@@ -1,7 +1,7 @@
 `include "ID_EX.v"
 `include "ExecutionUnit.v"
 `include "EX_MEM.v"
-/*ID/EX Buffer 141 bit*/
+/*ID/EX Buffer 107 bit*/
 /*
 1: IOR                                |  0 
 1: IOW                                |  1
@@ -26,9 +26,6 @@
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
 16: Immediate_Value                   |  106:91
-2: Forwarding_Unit_Selectors          |  108:107
-16: Data_From_Forwarding_Unit1        |  124:109
-16: Data_From_Forwarding_Unit2        |  140:125
 */
 
 /*EX/MEM Buffer 76*/
@@ -60,7 +57,8 @@ module Processor();
     reg [2:0]Flags,Flags_From_Memory;
     reg [15:0] INPUT_PORT;
     reg [31:0] Stack_Pointer;
-
+    reg [1:0] Selectors_Forwarding_Unit;
+    reg [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
     wire [2:0] Flags_in;
     wire [31:0] Stack_Pointer_Out;
     wire JMP,To_PC_Selector;
@@ -101,11 +99,11 @@ module Processor();
     .PC(IDEXBuffer[83:52]),
 
     /*Signals*/
-    .Forwarding_Unit_Selectors(IDEXBuffer[108:107]), // 1-bit To be changed in the design
+    .Forwarding_Unit_Selectors(Selectors_Forwarding_Unit), // 1-bit To be changed in the design
 
     /*Asynchronous Inputs*/
-    .Data_From_Forwarding_Unit1(IDEXBuffer[124:109]),
-    .Data_From_Forwarding_Unit2(IDEXBuffer[140:125]),
+    .Data_From_Forwarding_Unit1(Forwarding_Unit_Data1),
+    .Data_From_Forwarding_Unit2(Forwarding_Unit_Data2),
 
     /*Flags*/
     /*NF|CF|ZF*/
@@ -156,8 +154,11 @@ module Processor();
         Flags_From_Memory=3'b000;
         INPUT_PORT=16'd12;
         Stack_Pointe=32'd10;
-        ID_EX_input={}
+        ID_EX_input={16'd9,3'd0,3'b101,32'd15,5'd0,1'b1,2'd0,3'b111,16'd127,16'd10,2'b10,7'd0};
         clk=0;
+
+        #DELAY
+        
     end
 
     always begin

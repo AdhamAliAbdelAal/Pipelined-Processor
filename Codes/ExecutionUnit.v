@@ -1,4 +1,4 @@
-/*ID/EX Buffer 141 bit*/
+/*ID/EX Buffer 107 bit*/
 /*
 1: IOR                                |  0 
 1: IOW                                |  1
@@ -23,9 +23,6 @@
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
 16: Immediate_Value                   |  106:91
-2: Forwarding_Unit_Selectors          |  108:107
-16: Data_From_Forwarding_Unit1        |  124:109
-16: Data_From_Forwarding_Unit2        |  140:125
 */
 
 /*EX/MEM Buffer 76*/
