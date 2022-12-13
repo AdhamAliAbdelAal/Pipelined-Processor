@@ -1,4 +1,4 @@
-/*ID/EX Buffer 192 bit*/
+/*ID/EX Buffer 141 bit*/
 /*
 1: IOR                                |  0 
 1: IOW                                |  1
@@ -22,16 +22,13 @@
 1: IMM                                |  88
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
-16: Immediate_Value                   |  106
+16: Immediate_Value                   |  106:91
 2: Forwarding_Unit_Selectors          |  108:107
-3: Flags                              |  111:109
-16: Data_From_Forwarding_Unit1        |  127:112
-16: Data_From_Forwarding_Unit2        |  143:128
-16: INPUT_PORT                        |  159:144
-32: Stack_Pointer                     |  191:160
+16: Data_From_Forwarding_Unit1        |  124:109
+16: Data_From_Forwarding_Unit2        |  140:125
 */
 
-/*EX/MEM Buffer 110*/
+/*EX/MEM Buffer 76*/
 /*
 32: Data                    | 31:0
 3: WB_Address_Out           | 34:32         
@@ -42,10 +39,7 @@
 1: JWSP_Out                 | 70
 1: Stack_PC_Out             | 71
 1: Stack_Flags_Out          | 72
-1: Taken_Jump               | 73
-1: To_PC_Selector           | 74
-3: Final_Flags              | 77:75
-32: Stack_Pointer_Out       | 109:78
+3: Final_Flags              | 75:73
 */
 
 

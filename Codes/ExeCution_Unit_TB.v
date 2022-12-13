@@ -1,7 +1,7 @@
 `include "ID_EX.v"
 `include "ExecutionUnit.v"
 `include "EX_MEM.v"
-/*ID/EX Buffer 192 bit*/
+/*ID/EX Buffer 141 bit*/
 /*
 1: IOR                                |  0 
 1: IOW                                |  1
@@ -25,16 +25,13 @@
 1: IMM                                |  88
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
-16: Immediate_Value                   |  106
+16: Immediate_Value                   |  106:91
 2: Forwarding_Unit_Selectors          |  108:107
-3: Flags                              |  111:109
-16: Data_From_Forwarding_Unit1        |  127:112
-16: Data_From_Forwarding_Unit2        |  143:128
-16: INPUT_PORT                        |  159:144
-32: Stack_Pointer                     |  191:160
+16: Data_From_Forwarding_Unit1        |  124:109
+16: Data_From_Forwarding_Unit2        |  140:125
 */
 
-/*EX/MEM Buffer 110*/
+/*EX/MEM Buffer 76*/
 /*
 32: Data                    | 31:0
 3: WB_Address_Out           | 34:32         
@@ -45,10 +42,7 @@
 1: JWSP_Out                 | 70
 1: Stack_PC_Out             | 71
 1: Stack_Flags_Out          | 72
-1: Taken_Jump               | 73
-1: To_PC_Selector           | 74
-3: Final_Flags              | 77:75
-32: Stack_Pointer_Out       | 109:78
+3: Final_Flags              | 75:73
 */
 
 module Processor();
@@ -63,13 +57,93 @@ module Processor();
     wire [53:0] EXMEMBuffer;
 
     reg clk;
+    reg [2:0]Flags,Flags_From_Memory;
+    reg [15:0] INPUT_PORT;
+    reg [31:0] Stack_Pointer;
+
+    wire [2:0] Flags_Out;
+    wire [31:0] Stack_Pointer_Out;
+
+    wire JMP;
 
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk));
 
     /*Execution Unit*/
-    ExecutionUnit EXUNIT (.ALU(IDEXBuffer[33]), .ALUOperation(IDEXBuffer[32]), .Data1(IDEXBuffer[31:16]),
-    .Data2((IDEXBuffer[40]==1'b0)?IDEXBuffer[15:0]:IFIDBuffer), .DataOut(EX_MEM_input[47:32]), .Address(EX_MEM_input[31:0]));
+    ExecutionUnit EXUNIT (
+    /*Inputs From Buffer*/
+    .IOR(IDEXBuffer[0]),
+    .IOW(IDEXBuffer[1]),
+    .OPS(IDEXBuffer[2]),
+    .ALU(IDEXBuffer[6]),
+    .MR(IDEXBuffer[44]),
+    .MW(IDEXBuffer[45]),
+    .WB(IDEXBuffer[46]),
+    .JMP(IDEXBuffer[47]),
+    .SP(IDEXBuffer[48]),
+    .SPOP(IDEXBuffer[49]),
+    .JWSP(IDEXBuffer[84]),
+    .IMM(IDEXBuffer[88]),
+    .Stack_PC(IDEXBuffer[89]),
+    .Stack_Flags(IDEXBuffer[90]),
+
+    .FD(IDEXBuffer[8:7]),
+    .FGS(IDEXBuffer[51:50]),
+
+    .ALU_OP(IDEXBuffer[5:3]),
+    .WB_Address(IDEXBuffer[43:41]),
+    .SRC_Address(IDEXBuffer[87:85]),
+
+    .Data1(IDEXBuffer[24:9]),
+    .Data2(IDEXBuffer[40:25]),
+    .Immediate_Value(IDEXBuffer[106:91]),
+    .PC(IDEXBuffer[83:52]),
+
+    /*Signals*/
+    .Forwarding_Unit_Selectors(IDEXBuffer[108:107]), // 1-bit To be changed in the design
+
+    /*Asynchronous Inputs*/
+    .Data_From_Forwarding_Unit1(IDEXBuffer[124:109]),
+    .Data_From_Forwarding_Unit2(IDEXBuffer[140:125]),
+
+    /*Flags*/
+    /*NF|CF|ZF*/
+    .Flags(Flags),
+
+    /*Flags From Memory*/
+    /*NF|CF|ZF*/
+    .Flags_From_Memory(Flags_From_Memory),
+
+    /*Input Port*/
+    .INPUT_PORT(INPUT_PORT),
+
+    /*Stack Pointer*/
+    .Stack_Pointer(Stack_Pointer),
+
+    /*Outputs*/
+    .MR_Out(EX_MEM_input[35]),
+    .MW_Out(EX_MEM_input[36]),
+    .WB_Out(EX_MEM_input[37]),
+    .JWSP_Out(EX_MEM_input[70]),
+    .Stack_PC_Out(EX_MEM_input[71]),
+    .Stack_Flags_Out(EX_MEM_input[72]),
+    .WB_Address_Out(EX_MEM_input[34:32]),
+    .Data(EX_MEM_input[31:0]),Address,
+
+    /*Flags Outputs*/
+    /*NF|CF|ZF*/
+    .Final_Flags(Flags_Out),
+
+    /*Stack Pointer Out*/
+    .Stack_Pointer_Out(Stack_Pointer_Out),
+
+    /*For Jumps*/
+    .Taken_Jump(JMP), 
+
+    /* Output Signals */
+    /*PC Selectors*/
+    To_PC_Selector
+);
 
     /*EX/MEM Buffer*/
     EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk));
