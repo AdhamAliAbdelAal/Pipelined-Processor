@@ -180,5 +180,5 @@ module ExecutionUnit(
     assign To_PC_Selector = (Taken_Jump & !JWSP);
 
     /*Unchangable*/
-    assign  {MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out}={MR,MW,WB,JWSP,Stack_PC,Stack_Flags};
+    assign  {MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out,WB_Address_Out}={MR,MW,WB,JWSP,Stack_PC,Stack_Flags,WB_Address};
 endmodule

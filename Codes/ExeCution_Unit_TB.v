@@ -151,12 +151,16 @@ module Processor();
 
     initial begin
         $monitor("IDEXBuffer=%b,EXMEMBuffer=%b",IDEXBuffer,EXMEMBuffer);
+        /*MOV*/
         Flags=3'b000;
         Flags_From_Memory=3'b000;
         INPUT_PORT=16'd12;
         Stack_Pointer=32'd10;
         IF_Buffer=16'd12;
-        ID_EX_input={16'd9,3'd0,3'b101,32'd15,5'd0,1'b1,2'd0,3'b111,16'd127,16'd10,2'b10,7'd0};
+        Forwarding_Unit_Data1=16'd55;
+        Forwarding_Unit_Data2=16'd127;
+        Selectors_Forwarding_Unit=2'b00;
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd127,16'd10,2'b10,7'd0};
         clk=0;
 
         #DELAY;
