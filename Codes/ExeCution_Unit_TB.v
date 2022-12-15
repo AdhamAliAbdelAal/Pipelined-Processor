@@ -170,7 +170,7 @@ module Processor();
         #DELAY;
 
         /*SUB*/
-        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd23,2'b10,1'b1,3'd0,3'd0};
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd23,2'b10,1'b1,3'd1,3'd0};
 
         #DELAY;
 
