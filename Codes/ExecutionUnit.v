@@ -140,7 +140,8 @@ module ExecutionUnit(
 
 
     /* Level 3 */
-    assign Data_To_Use=(JMP==1'b1)?Operand1:
+    assign Data_To_Use=(SP===1'b1)?Operand1:
+        (JMP==1'b1)?Operand1:
         (IOW==1'b1)?Operand1:
         (ALU===1'b1)?Data_From_ALU:
         (IOR===1'b1)?INPUT_PORT:

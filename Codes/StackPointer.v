@@ -5,6 +5,6 @@ module StackPointer(
     input clk,reset;
     output reg [31:0] Buffer;
     always @(posedge clk) begin
-        Buffer<=(reset==1'b0)?DataIn:32'd0;
+        Buffer<=(reset==1'b0)?DataIn:32'd50;
     end
 endmodule

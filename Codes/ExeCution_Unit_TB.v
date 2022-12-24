@@ -70,7 +70,7 @@ module Processor();
     wire JMP,To_PC_Selector;
 
     /*Stack Pointer*/
-    StackPointer Stack_Pointer(.DataIn(Stack_Pointer_Out), .Buffer(Stack_Pointer), .clk(clk), .reset(reset))
+    StackPointer Stack_Pointer_Register(.DataIn(Stack_Pointer_Out), .Buffer(Stack_Pointer), .clk(clk), .reset(reset));
 
     /*Flag Register*/
     FlagRegister Flag_Register(.DataIn(EX_MEM_input[75:73]), .Buffer(Flags), .clk(clk), .reset(reset));
@@ -168,15 +168,15 @@ module Processor();
 
     initial begin
         // $monitor("IDEXBuffer=%b,EXMEMBuffer=%b",IDEXBuffer,EXMEMBuffer);
-        $monitor("IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d"
+        $monitor("IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d, JMP_Flag=%b"
         ,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EXMEMBuffer[70],
-        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer
+        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer, JMP
         );
         clk=1;
         reset=1'b1;
         Flags_From_Memory=3'b000;
         INPUT_PORT=16'd12;
-        Stack_Pointer=32'd10;
+        
         IF_Buffer=16'd12;
         Forwarding_Unit_Data1=16'd55;
         Forwarding_Unit_Data2=16'd127;
@@ -264,11 +264,6 @@ module Processor();
 
         #DELAY;
 
-        /*NOP*/
-        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
-
-        #DELAY;
-
         /*IN R6*/
         ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b1,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd1};
 
@@ -279,7 +274,63 @@ module Processor();
 
         #DELAY;
 
+
+        /*PUSH R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd2,1'b0,2'd2,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*POP R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd6,1'b0,2'd1,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*POP R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd6,1'b0,2'd1,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*PUSH R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd2,1'b0,2'd2,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*LDM R7,525*/
+        IF_Buffer = 16'd525;
+        ID_EX_input={3'd1,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd127,16'd10,2'b10,7'd0};
+
+        #DELAY;
+
+        /*LDD R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b1,2'd1,3'b110,16'd606,16'd11,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*STD R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd2,3'b110,16'd606,16'd11,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+                                    /*Output in Same Cycle Of JZ, JC, JN*/
+        /*JZ R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'b00001,1'b0,2'd0,3'b101,16'd66,16'd888,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*JC R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'b10001,1'b0,2'd0,3'b101,16'd66,16'd444,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        /*JN R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'b01001,1'b0,2'd0,3'b101,16'd66,16'd777,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
         
+        /*NOP*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
 
 
 
