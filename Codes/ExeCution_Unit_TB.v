@@ -54,13 +54,13 @@ module Processor();
     wire [75:0] EX_MEM_input;
     wire [75:0] EXMEMBuffer;
 
-    wire [15:0] OUTPUT_PORT_Register;
+    wire [15:0] OUTPUT_PORT_Output,OUTPUT_PORT_Register;
 
     reg clk;
     reg reset;
     reg [15:0] IF_Buffer;
     reg [2:0]Flags_From_Memory;
-    reg [15:0] INPUT_PORT,OUTPUT_PORT_Output;
+    reg [15:0] INPUT_PORT;
     reg [31:0] Stack_Pointer;
     reg [1:0] Selectors_Forwarding_Unit;
     reg [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
@@ -261,12 +261,17 @@ module Processor();
         #DELAY;
 
         /*NOP*/
-        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b00,1'b0,3'd000,1'b0,2'd0};
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
 
         #DELAY;
 
         /*IN R6*/
-        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b1,2'd0,3'b110,16'd66,16'd15,2'b00,1'b0,3'd000,1'b0,2'd1};
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b1,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd1};
+
+        #DELAY;
+
+        /*OUT R6*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd77,2'b10,1'b0,3'd000,1'b0,2'd2};
 
         #DELAY;
 
