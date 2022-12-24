@@ -120,7 +120,7 @@ module ExecutionUnit(
 
     assign Operand2= (OPS==1'b1)?16'd1:Data_Or_One;
 
-    assign OUTPUT_PORT = IOW==1'b0?OUTPUT_PORT_Input:Operand1;
+    assign OUTPUT_PORT = (IOW==1'b0)?OUTPUT_PORT_Input:Operand1;
 
 
     /* Level 2 */
