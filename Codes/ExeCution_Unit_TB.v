@@ -2,6 +2,7 @@
 `include "ExecutionUnit.v"
 `include "EX_MEM.v"
 `include "FlagRegister.v"
+`include "OUTPUTPORT.v"
 /*ID/EX Buffer 91 bit*/
 /*
 1: IOR                                |  0 
@@ -53,11 +54,13 @@ module Processor();
     wire [75:0] EX_MEM_input;
     wire [75:0] EXMEMBuffer;
 
+    wire [15:0] OUTPUT_PORT_Register;
+
     reg clk;
     reg reset;
     reg [15:0] IF_Buffer;
     reg [2:0]Flags_From_Memory;
-    reg [15:0] INPUT_PORT;
+    reg [15:0] INPUT_PORT,OUTPUT_PORT_Output;
     reg [31:0] Stack_Pointer;
     reg [1:0] Selectors_Forwarding_Unit;
     reg [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
@@ -67,6 +70,9 @@ module Processor();
 
     /*Flag Register*/
     FlagRegister Flag_Register(.DataIn(EX_MEM_input[75:73]), .Buffer(Flags), .clk(clk), .reset(reset));
+
+    /*Output Port*/
+    OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk));
     
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk));
@@ -119,6 +125,10 @@ module Processor();
     /*Input Port*/
     .INPUT_PORT(INPUT_PORT),
 
+    /*Output Port*/
+    .OUTPUT_PORT(OUTPUT_PORT_Output),
+    .OUTPUT_PORT_Input(OUTPUT_PORT_Register),
+
     /*Stack Pointer*/
     .Stack_Pointer(Stack_Pointer),
 
@@ -154,9 +164,9 @@ module Processor();
 
     initial begin
         // $monitor("IDEXBuffer=%b,EXMEMBuffer=%b",IDEXBuffer,EXMEMBuffer);
-        $monitor("IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b"
+        $monitor("IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d"
         ,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EXMEMBuffer[70],
-        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags
+        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register
         );
         clk=1;
         reset=1'b1;
@@ -255,7 +265,14 @@ module Processor();
 
         #DELAY;
 
-        
+        /*IN*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b00,1'b0,3'd000,1'b0,2'd1};
+
+        #DELAY;
+
+
+
+
 
 
     end

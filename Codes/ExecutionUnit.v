@@ -65,6 +65,10 @@ module ExecutionUnit(
     /*Input Port*/
     INPUT_PORT,
 
+    /*Output Port*/
+    OUTPUT_PORT,
+    OUTPUT_PORT_Input,
+
     /*Stack Pointer*/
     Stack_Pointer,
 
@@ -91,12 +95,13 @@ module ExecutionUnit(
     input IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags;
     input [1:0] FD,FGS,Forwarding_Unit_Selectors;
     input [2:0] ALU_OP,WB_Address,SRC_Address,Flags,Flags_From_Memory;
-    input [15:0] Data1,Data2,Immediate_Value,Data_From_Forwarding_Unit1,Data_From_Forwarding_Unit2,INPUT_PORT;
+    input [15:0] Data1,Data2,Immediate_Value,Data_From_Forwarding_Unit1,Data_From_Forwarding_Unit2,INPUT_PORT,OUTPUT_PORT_Input;
     input [31:0] PC, Stack_Pointer;
 
     /*Outputs*/
     output MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out, Taken_Jump, To_PC_Selector;
     output [2:0] WB_Address_Out,Final_Flags;
+    output [15:0] OUTPUT_PORT;
     output [31:0] Data,Address, Stack_Pointer_Out;
 
     /*Connections*/
@@ -114,6 +119,8 @@ module ExecutionUnit(
     assign Data_Or_One= (Forwarding_Unit_Selectors[1]==1'b1)?Data_From_Forwarding_Unit2:Immediate_Or_Register;
 
     assign Operand2= (OPS==1'b1)?16'd1:Data_Or_One;
+
+    assign OUTPUT_PORT = IOW==1'b0?OUTPUT_PORT_Input:Operand1;
 
 
     /* Level 2 */
