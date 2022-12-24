@@ -140,8 +140,8 @@ module ExecutionUnit(
         (MW===1'b1)?Operand2:Operand2;
 
 
-    assign Flags_From_Decision=(FD==2'b00)?{Flags[2],0,Flags[0]}:
-        (FD==2'b01)?{Flags[2],1,Flags[0]}:
+    assign Flags_From_Decision=(FD==2'b00)?{Flags[2],1'b0,Flags[0]}:
+        (FD==2'b01)?{Flags[2],1'b1,Flags[0]}:
         (FD==2'b10)?Flags:
         (FD==2'b11)?Flags_Out:3'b000;
 
