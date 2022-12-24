@@ -167,8 +167,10 @@ module Processor();
         Forwarding_Unit_Data1=16'd55;
         Forwarding_Unit_Data2=16'd127;
         Selectors_Forwarding_Unit=2'b00;
+        ID_EX_input=91'd0;
 
         #DELAY;
+        reset=1'b0;
 
         /*MOV R7,127*/
         ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd127,16'd10,2'b10,7'd0};
@@ -233,11 +235,6 @@ module Processor();
 
         #DELAY;
 
-        /*DEC 7*/
-        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b110,16'd66,16'd7,2'b11,1'b1,3'd1,1'b1,2'd0};
-
-        #DELAY;
-
         /*NOT 15*/
         ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b110,16'd66,16'd15,2'b11,1'b1,3'd7,1'b0,2'd0};
 
@@ -257,6 +254,8 @@ module Processor();
         ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b00,1'b0,3'd000,1'b0,2'd0};
 
         #DELAY;
+
+        
 
 
     end
