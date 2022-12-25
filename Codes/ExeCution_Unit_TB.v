@@ -159,7 +159,11 @@ module Processor();
 
     /* Output Signals */
     /*PC Selectors*/
-    .To_PC_Selector(To_PC_Selector)
+    .To_PC_Selector(To_PC_Selector),
+
+     /*Data From EX/MEM Buffer*/
+    .MEM_Stack_Flags(EXMEMBuffer[72]),
+    .MEM_MR(EXMEMBuffer[35])
 );
 
     /*EX/MEM Buffer*/
@@ -378,6 +382,24 @@ module Processor();
         /*Taken*/
         /*JN R6*/
         ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'b01001,1'b0,2'd0,3'b101,16'd66,16'd777,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        instuction="CALL R6";
+        /*CALL R6*/
+        ID_EX_input={3'd2,3'b111,1'b0,32'd1465,5'b11011,1'b0,2'd2,3'b101,16'd55,16'd5555,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        instuction="RET";
+        /*RET*/
+        ID_EX_input={3'd2,3'b111,1'b1,32'd1558,5'b11111,1'b0,2'd1,3'b101,16'd55,16'd5555,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
+
+        instuction="RTI";
+        /*RET*/
+        ID_EX_input={3'd6,3'b111,1'b1,32'd1558,5'b11111,1'b0,2'd1,3'b101,16'd55,16'd5555,2'b10,1'b0,3'd000,1'b0,2'd0};
 
         #DELAY;
 

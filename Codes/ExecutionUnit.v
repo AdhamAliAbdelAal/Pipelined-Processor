@@ -89,10 +89,13 @@ module ExecutionUnit(
 
     /* Output Signals */
     /*PC Selectors*/
-    To_PC_Selector
+    To_PC_Selector,
+    /*Data From EX/MEM Buffer*/
+    MEM_Stack_Flags,
+    MEM_MR
 );  
     /*Inputs*/
-    input IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags;
+    input IOR,IOW,OPS,ALU,MR,MW,WB,JMP,SP,SPOP,JWSP,IMM,Stack_PC,Stack_Flags,MEM_Stack_Flags,MEM_MR;
     input [1:0] FD,FGS,Forwarding_Unit_Selectors;
     input [2:0] ALU_OP,WB_Address,SRC_Address,Flags,Flags_From_Memory;
     input [15:0] Data1,Data2,Immediate_Value,Data_From_Forwarding_Unit1,Data_From_Forwarding_Unit2,INPUT_PORT,OUTPUT_PORT_Input;
@@ -154,7 +157,7 @@ module ExecutionUnit(
         (FD==2'b11)?Flags_Out:3'b000;
 
     
-    assign Select_Flags_Or_From_Memory= Stack_Flags & MR;
+    assign Select_Flags_Or_From_Memory= MEM_Stack_Flags&MEM_MR;
 
     assign Final_Flags=(Select_Flags_Or_From_Memory==1'b1)?Flags_From_Memory:Flags_From_Decision;
 
