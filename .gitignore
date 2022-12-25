@@ -1,3 +1,4 @@
 Modelsim
 *.xlsx
-.$Design.drawio.dtmp
+*.dtmp
+*.bkp
