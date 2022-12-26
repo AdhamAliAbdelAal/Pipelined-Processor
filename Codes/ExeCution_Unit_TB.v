@@ -4,6 +4,7 @@
 `include "FlagRegister.v"
 `include "OUTPUTPORT.v"
 `include "StackPointer.v"
+`include "ForwardingUnit.v"
 /*ID/EX Buffer 91 bit*/
 /*
 1: IOR                                |  0 
@@ -63,11 +64,28 @@ module Processor();
     reg [2:0]Flags_From_Memory;
     reg [15:0] INPUT_PORT;
     wire [31:0] Stack_Pointer;
-    reg [1:0] Selectors_Forwarding_Unit;
-    reg [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
+    wire [1:0] Selectors_Forwarding_Unit;
+    wire [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
     wire [2:0] Flags;
     wire [31:0] Stack_Pointer_Out;
     wire JMP,To_PC_Selector;
+
+    reg WB_MEM_WB;
+
+    /*Forwarding Unit*/
+    ForwardingUnit Forwarding_Unit (
+    .Dst_ID_EX(IDEXBuffer[43:41]),
+    .Src_ID_EX(IDEXBuffer[87:85]),
+    .Dst_EX_MEM(EXMEMBuffer[34:32]),
+    .WB_EX_MEM(EXMEMBuffer[37]),
+    .Data_EX_MEM(EXMEMBuffer[15:0]),
+    .Dst_MEM_WB(3'd3),
+    .WB_MEM_WB(WB_MEM_WB),
+    .Data_MEM_WB(16'd561),
+    .Data_Dst(Forwarding_Unit_Data1),
+    .Data_Src(Forwarding_Unit_Data2),
+    .Selectors(Selectors_Forwarding_Unit)
+    );
 
     /*Stack Pointer*/
     StackPointer Stack_Pointer_Register(.DataIn(Stack_Pointer_Out), .Buffer(Stack_Pointer), .clk(clk), .reset(reset));
@@ -183,9 +201,6 @@ module Processor();
         INPUT_PORT=16'd12;
         
         IF_Buffer=16'd12;
-        Forwarding_Unit_Data1=16'd55;
-        Forwarding_Unit_Data2=16'd127;
-        Selectors_Forwarding_Unit=2'b00;
         ID_EX_input=91'd0;
 
         #DELAY;
@@ -403,14 +418,49 @@ module Processor();
 
         #DELAY;
 
+        /*ADD 7,8 ADD Some Value to R7*/
+        instuction="ADD 7,8 ADD Some Value to R7";
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd7,2'b11,1'b1,3'd0,3'd0};
+
+        #DELAY;
+
+        /*ADD 7,8 ADD Some Value to R7 Will Take 15 not 7*/
+        instuction="ADD 7,8 ADD Some Value to R7 Will Take 15 not 7";
+        ID_EX_input={3'd0,3'b101,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd7,2'b11,1'b1,3'd0,3'd0};
+
+        #DELAY;
+
+        /*ADD 7,8 ADD Some Value to R7 Will Take 23 not 7 or 8*/
+        instuction="ADD 7,8 ADD Some Value to R7 Will Take 23 not 7 or 8";
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b1,2'd0,3'b111,16'd8,16'd7,2'b11,1'b1,3'd0,3'd0};
+
+        #DELAY;
+
+        /*ADD 7,8 ADD Some Value to R3 Will Take 561 not 7 or 8*/
+        WB_MEM_WB=1'b1;
+        instuction="ADD 7,8 ADD Some Value to R3 Will Take 561 not 7 or 8";
+        ID_EX_input={3'd0,3'b011,1'b0,32'd15,5'd0,1'b1,2'd0,3'b011,16'd8,16'd7,2'b11,1'b1,3'd0,3'd0};
+
+        #DELAY;
+
         instuction="NOP";
         /*NOP*/
         ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
 
         #DELAY;
 
+        /*ADD 7,8 ADD Some Value to R3 Will Take 7 and 8 not 561*/
+        WB_MEM_WB=1'b0;
+        instuction="ADD 7,8 ADD Some Value to R3 Will Take 7 and 8 not 561";
+        ID_EX_input={3'd0,3'b011,1'b0,32'd15,5'd0,1'b1,2'd0,3'b011,16'd8,16'd7,2'b11,1'b1,3'd0,3'd0};
 
+        #DELAY;
 
+        instuction="NOP";
+        /*NOP*/
+        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
+
+        #DELAY;
 
     end
 
