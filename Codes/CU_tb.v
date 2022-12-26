@@ -9,25 +9,26 @@ module CU_tb();
 
 	// outputs
 	wire WB, ALU,Imm,Selector,MR,MW,Jmp,IOR,IOW,Stack_PC,Stack_Flags,
-		 IsCarryOp,CarryOp,IsStackOp,StackOp,JWSP,Call;
-	wire [1:0] Flag_Selector,Data_To_Use;
+		 IsCarryOp,CarryOp,IsStackOp,StackOp,JWSP;
+	wire [1:0] FD;
+	wire [1:0] Flag_Selector;
 	wire [2:0] ALU_Ops;
 
 	// instance module
 	CU cu(.Opcode(Opcode),.INT(INT),.WB(WB),.ALU(ALU),.Imm(Imm),.Selector(Selector),.MR(MR),.MW(MW),
-		.Jmp(Jmp),.IOR(IOR),.IOW(IOW),.Stack_PC(Stack_PC),.Stack_Flags(Stack_Flags),.IsCarryOp(IsCarryOp),.CarryOp(CarryOp),
-		.IsStackOp(IsStackOp),.StackOp(StackOp),.JWSP(JWSP),.Call(Call),.Flag_Selector(Flag_Selector),.ALU_Ops(ALU_Ops),.Data_To_Use(Data_To_Use)
+		.Jmp(Jmp),.IOR(IOR),.IOW(IOW),.Stack_PC(Stack_PC),.Stack_Flags(Stack_Flags),.FD(FD),
+		.IsStackOp(IsStackOp),.StackOp(StackOp),.JWSP(JWSP),.Flag_Selector(Flag_Selector),.ALU_Ops(ALU_Ops)
 		);
 	initial begin
 		$monitor("****************************************************************
 	Opcode = %b, INT = %b  
 	WB = %b ALU = %b  Imm = %b   Selector = %b MR = %b  MW = %b   Jmp = %b
-	IOR = %b  IOW = %b   Stack_PC = %b Stack_Flags = %b  IsCarryOp = %b   CarryOp = %b
-	IsStackOp = %b  StackOp = %b   JWSP = %b Call = %b  Flag_Selector = %b   ALU_Ops = %b  Data_To_Use=%b
+	IOR = %b  IOW = %b   Stack_PC = %b Stack_Flags = %b  FD = %b
+	IsStackOp = %b  StackOp = %b   JWSP = %b  Flag_Selector = %b   ALU_Ops = %b
 ****************************************************************",
 		Opcode,INT,WB,ALU,Imm,Selector,MR,MW,
-		Jmp,IOR,IOW,Stack_PC,Stack_Flags,IsCarryOp,CarryOp,
-		IsStackOp,StackOp,JWSP,Call,Flag_Selector,ALU_Ops,Data_To_Use);
+		Jmp,IOR,IOW,Stack_PC,Stack_Flags,FD,
+		IsStackOp,StackOp,JWSP,Flag_Selector,ALU_Ops);
 		clk=0;
 		
 

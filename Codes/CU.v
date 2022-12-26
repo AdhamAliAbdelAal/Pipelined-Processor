@@ -1,17 +1,18 @@
 module CU (Opcode,INT, WB, ALU, ALU_Ops, Imm, Selector, MR, MW, Jmp, Flag_Selector,
-		IsCarryOp, CarryOp, IOR, IOW, IsStackOp, StackOp,
-		Stack_PC, Stack_Flags, JWSP, Call,Data_To_Use);
+		FD, IOR, IOW, IsStackOp, StackOp,
+		Stack_PC, Stack_Flags, JWSP);
 
 //Input is opcode, INT
 input [7:0] Opcode;
 input INT;
 
-output WB, ALU,Imm,Selector,MR,MW,Jmp,IOR,IOW,Stack_PC,Stack_Flags,
-	IsCarryOp,CarryOp,IsStackOp,StackOp,JWSP,Call;
-output [1:0] Flag_Selector,Data_To_Use;
+output WB, ALU,Imm,Selector,MR,MW,Jmp,IOR,IOW,Stack_PC,Stack_Flags,IsStackOp,StackOp,JWSP;
+output [1:0] Flag_Selector;
 output [2:0] ALU_Ops;
+output [1:0] FD ; 
 
-
+wire Call;
+wire IsCarryOp,CarryOp;
 wire Load;
 wire Store;
 wire Mov;
@@ -66,9 +67,9 @@ assign WB = ( Load || ALU || IOR || (IsStackOp&&StackOp) || Imm || Mov) && !INT 
 assign MR = ( Load || (IsStackOp&&StackOp) || JWSP ) && !INT;
 
 assign MW = ( Store || Call || (IsStackOp&&!StackOp) ) || INT;
-assign Data_To_Use=(Jmp || IOW)?2'b00:
-					(MW)? 2'b01:
-					(ALU)? 2'b10:
-					(IOR)?2'b11:2'b00;
+
+assign FD = ({IsCarryOp,CarryOp}==2'b10)?2'b00:
+			({IsCarryOp,CarryOp}==2'b11)?2'b01:
+			(ALU)?2'b11:2'b10;
 
 endmodule
