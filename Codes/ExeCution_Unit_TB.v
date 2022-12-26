@@ -45,7 +45,7 @@
 3: Final_Flags              | 75:73
 */
 
-module Processor();
+module ExeCution_Unit_TB();
     localparam CLK=5;
     localparam DELAY=2*CLK;
     localparam MEMDELAY=5;
@@ -440,12 +440,6 @@ module Processor();
         WB_MEM_WB=1'b1;
         instuction="ADD 7,8 ADD Some Value to R3 Will Take 561 not 7 or 8";
         ID_EX_input={3'd0,3'b011,1'b0,32'd15,5'd0,1'b1,2'd0,3'b011,16'd8,16'd7,2'b11,1'b1,3'd0,3'd0};
-
-        #DELAY;
-
-        instuction="NOP";
-        /*NOP*/
-        ID_EX_input={3'd0,3'b111,1'b0,32'd15,5'd0,1'b0,2'd0,3'b110,16'd66,16'd15,2'b10,1'b0,3'd000,1'b0,2'd0};
 
         #DELAY;
 

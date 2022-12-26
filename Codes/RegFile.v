@@ -19,14 +19,6 @@ if(write_back)
 
 end   //End of Always Module
 
-// /*Sync*/
-// always@(negedge clk)
-// begin
-//  read_data1 = registers[dst_addr];
-//  read_data2 = registers[src_addr];
-// end  //End of Always Module
-
-
 /*Async*/
 // Assign Source and Destination
 assign read_data1 = registers[dst_addr];
