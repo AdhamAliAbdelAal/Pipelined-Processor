@@ -1,4 +1,4 @@
-/*MR|SP*/
+/*MR|EXEC_Dst|DEC_Src1|DEC_Src2*/
 module Load_Use_Case(
     MR,EXEC_Dst, DEC_Src1, DEC_Src2, Keep_Fetched_Instruction, Keep_PC, Flush_MUX_Selector
 );
