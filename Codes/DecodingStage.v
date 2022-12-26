@@ -2,9 +2,10 @@
 `include "Mux2Inputs.v"
 
 module  DecodingStage(write_back, read_data1, alu_input2,  write_data, clk,
-src_addr,dst_addr,write_addr);
+src_addr,dst_addr,write_addr,reset);
 
-input  write_back;       
+input  write_back;      
+input reset; 
 input [15:0] write_data;
 input  clk;
 input  [2:0]src_addr;   	//Source Address
@@ -16,7 +17,7 @@ wire [15:0] src_mux_input; //Data2
 output wire [15:0] alu_input2;
 
 
-RegFile file(write_back, read_data1, read_data2, write_data, clk, src_addr, dst_addr, write_addr);
+RegFile file(write_back, read_data1, read_data2, write_data, clk, src_addr, dst_addr, write_addr,reset);
 assign src_mux_input = read_data2;
 assign alu_input2 = read_data2;
     
