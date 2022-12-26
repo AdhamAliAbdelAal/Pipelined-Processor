@@ -25,12 +25,15 @@
 */
 
 module ID_EX(
-    DataIn, Buffer, clk
+    DataIn, Buffer, clk, reset, flush
 );
     input [90:0] DataIn;
-    input clk;
+    input clk,reset,flush;
     output reg [90:0] Buffer;
     always @(posedge clk) begin
-        Buffer<=DataIn;
+        if(reset==1'b1||flush==1'b1)
+            Buffer=91'b0;
+        else
+            Buffer = DataIn;
     end
 endmodule

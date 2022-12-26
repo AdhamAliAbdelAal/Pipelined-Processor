@@ -79,7 +79,6 @@ module Processor();
     wire JMP,To_PC_Selector;
 
     reg WB_MEM_WB;
-    reg initial_reset;
 
     wire [31:0] PC_OUT;
     reg [15:0] Instruction;
@@ -88,7 +87,7 @@ module Processor();
 
 
     /*PC*/
-    Program_Counter PC(.reset(initial_reset) ,.clk(clk), .PC_Out(PC_OUT));
+    Program_Counter PC(.reset(reset) ,.clk(clk), .PC_Out(PC_OUT));
 
     /*Instruction Memory*/
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]));
@@ -96,7 +95,7 @@ module Processor();
     assign IF_ID_input[47:16]=PC_OUT;
 
     /*IF/ID Buffer*/
-    IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk));
+    IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk),.reset(reset));
 
     /*Control Unit*/
     CU CTRLUNIT (
@@ -135,7 +134,7 @@ module Processor();
     .Dst_ID_EX(IDEXBuffer[43:41]),
     .Src_ID_EX(IDEXBuffer[87:85]),
     .Dst_EX_MEM(EXMEMBuffer[34:32]),
-    .WB_EX_MEM(1'b0),
+    .WB_EX_MEM(EXMEMBuffer[37]),
     .Data_EX_MEM(EXMEMBuffer[15:0]),
     .Dst_MEM_WB(3'd3),
     .WB_MEM_WB(1'b0),
@@ -152,10 +151,10 @@ module Processor();
     FlagRegister Flag_Register(.DataIn(EX_MEM_input[75:73]), .Buffer(Flags), .clk(clk), .reset(reset));
 
     /*Output Port*/
-    OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk));
+    OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
     
     /*ID/EX Buffer*/
-    ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk));
+    ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(IDEXBuffer[88]));
 
     /*Execution Unit*/
     ExecutionUnit EXUNIT (
@@ -243,7 +242,7 @@ module Processor();
 );
 
     /*EX/MEM Buffer*/
-    EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk));
+    EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk),.reset(reset));
 
     reg [8*50:1] instuction;
 
@@ -286,14 +285,12 @@ module Processor();
         reset = 1'b1;
         Flags_From_Memory=3'b000;
         INPUT_PORT=16'd12;
-        initial_reset=1'b1;
         clk=0;
         #DELAY;
-        reset=1'b0;
-        initial_reset = 1'b0;
+        reset = 1'b0;
 
         #MEMDELAY
-        initial_reset = 1'b1;
+        reset = 1'b1;
 
     end
 
