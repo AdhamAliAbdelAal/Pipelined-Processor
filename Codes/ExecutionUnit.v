@@ -24,7 +24,7 @@
 1: Stack_Flags                        |  90
 */
 
-/*EX/MEM Buffer 76*/
+/*EX/MEM Buffer 78*/
 /*
 32: Data                    | 31:0
 3: WB_Address_Out           | 34:32         
@@ -36,6 +36,8 @@
 1: Stack_PC_Out             | 71
 1: Stack_Flags_Out          | 72
 3: Final_Flags              | 75:73
+1: SP_Out                   | 76
+1: SPOP_Out                 | 77
 */
 
 
@@ -73,7 +75,7 @@ module ExecutionUnit(
     Stack_Pointer,
 
     /*Outputs*/
-    MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out,
+    MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out, SP_Out, SPOP_Out,
     WB_Address_Out,
     Data,Address,
 
@@ -102,7 +104,7 @@ module ExecutionUnit(
     input [31:0] PC, Stack_Pointer;
 
     /*Outputs*/
-    output MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out, Taken_Jump, To_PC_Selector;
+    output MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out, Taken_Jump, To_PC_Selector, SP_Out, SPOP_Out;
     output [2:0] WB_Address_Out,Final_Flags;
     output [15:0] OUTPUT_PORT;
     output [31:0] Data,Address, Stack_Pointer_Out;
@@ -187,9 +189,9 @@ module ExecutionUnit(
         // Address = Src in Case of Load 
         // Address = Dst Otherwise
 
-
+    
     assign To_PC_Selector = (Taken_Jump & !JWSP);
 
     /*Unchangable*/
-    assign  {MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out,WB_Address_Out}={MR,MW,WB,JWSP,Stack_PC,Stack_Flags,WB_Address};
+    assign  {MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out,WB_Address_Out, SP_Out, SPOP_Out}={MR,MW,WB,JWSP,Stack_PC,Stack_Flags,WB_Address, SP, SPOP};
 endmodule

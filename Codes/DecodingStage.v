@@ -1,4 +1,3 @@
-`include "RegFile.v"
 `include "Mux2Inputs.v"
 
 module  DecodingStage(write_back, read_data1, alu_input2,  write_data, clk,

@@ -31,7 +31,7 @@
 1: Stack_Flags                        |  90
 */
 
-/*EX/MEM Buffer 76*/
+/*EX/MEM Buffer 78*/
 /*
 32: Data                    | 31:0
 3: WB_Address_Out           | 34:32         
@@ -43,6 +43,8 @@
 1: Stack_PC_Out             | 71
 1: Stack_Flags_Out          | 72
 3: Final_Flags              | 75:73
+1: SP_Out                   | 76
+1: SPOP_Out                 | 77
 */
 
 module ExeCution_Unit_TB();
@@ -53,8 +55,8 @@ module ExeCution_Unit_TB();
     reg [90:0] ID_EX_input;
     wire [90:0] IDEXBuffer;
 
-    wire [75:0] EX_MEM_input;
-    wire [75:0] EXMEMBuffer;
+    wire [77:0] EX_MEM_input;
+    wire [77:0] EXMEMBuffer;
 
     wire [15:0] OUTPUT_PORT_Output,OUTPUT_PORT_Register;
 
