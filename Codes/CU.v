@@ -53,7 +53,7 @@ assign CarryOp = Opcode[0];
 assign JWSP = ( Opcode[7] && Opcode[6] && Opcode[5] 
 	   && Opcode[4] && !Opcode[3] ) && !INT ;
 
-assign IsStackOp = ( (Opcode[5] && Opcode[4] && Opcode[3]) || JWSP ) || INT;
+assign IsStackOp = ( (Opcode[5] && Opcode[4] && Opcode[3]) );
 
 //1-> pop , 0->push
 assign StackOp = ( Opcode[0] || JWSP ) && !INT ;
