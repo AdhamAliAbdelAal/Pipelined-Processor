@@ -429,10 +429,15 @@ module Processor();
         Write_Address=Write_Address+1;
         Instruction={8'b10_011_000,3'b101,3'b101,2'b00};
 
+        #DELAY;
+        /*23 JC R5*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_011_010,3'b101,3'b101,2'b00};
+
         
 
         #DELAY;
-        /*13 ADD R6,R3*/
+        /*24 ADD R6,R3*/
         Write_Address=Write_Address+1;
         Instruction={8'b00000000,3'b110,3'b011,2'b00};
 
