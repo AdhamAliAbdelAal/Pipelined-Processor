@@ -71,7 +71,7 @@ module MemoryUnit(EX_MEM_input,out_flags,clk,Accumulated_PC,Stall_Signal,MEM_Out
 
     assign outData = (!EX_MEM_input[70] && EX_MEM_input[35])?MR_Data:EX_MEM_input[15:0];
 
-    assign MEM_Output[15:0] = outData;
-    assign MEM_Output[18:16] = EX_MEM_input[34:32];
-    assign MEM_Output[19] = EX_MEM_input[37] ;
+    assign MEM_Output[15:0] = outData; //data out
+    assign MEM_Output[18:16] = EX_MEM_input[34:32]; //dst
+    assign MEM_Output[19] = EX_MEM_input[37] ; //wb
 endmodule

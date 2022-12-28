@@ -75,8 +75,6 @@ module Processor();
 
     reg clk;
     reg reset;
-    reg [15:0] IF_Buffer;
-    reg [2:0]Flags_From_Memory;
     reg [15:0] INPUT_PORT;
     wire [31:0] Stack_Pointer;
     wire [1:0] Selectors_Forwarding_Unit;
@@ -85,7 +83,6 @@ module Processor();
     wire [31:0] Stack_Pointer_Out;
     wire JMP,To_PC_Selector;
 
-    reg WB_MEM_WB;
 
     wire [31:0] PC_OUT;
     reg [15:0] Instruction;
@@ -137,8 +134,8 @@ module Processor();
     assign ID_EX_input[87:85]=IFIDBuffer[4:2];
 
     /*Decoding Stage*/
-    DecodingStage DECSTAGE (.write_back(1'b0), .read_data1(ID_EX_input[24:9]), .alu_input2(ID_EX_input[40:25]),  .write_data(16'd15), .clk(clk),.reset(reset),
-    .src_addr(IFIDBuffer[4:2]),.dst_addr(IFIDBuffer[7:5]),.write_addr(3'd3));
+    DecodingStage DECSTAGE (.write_back(MEMWBBuffer[19]), .read_data1(ID_EX_input[24:9]), .alu_input2(ID_EX_input[40:25]),  .write_data(MEMWBBuffer[15:0]), .clk(clk),.reset(reset),
+    .src_addr(IFIDBuffer[4:2]),.dst_addr(IFIDBuffer[7:5]),.write_addr(MEMWBBuffer[18:16]));
 
     /*Forwarding Unit*/
     ForwardingUnit Forwarding_Unit (
@@ -147,9 +144,9 @@ module Processor();
     .Dst_EX_MEM(EXMEMBuffer[34:32]),
     .WB_EX_MEM(EXMEMBuffer[37]),
     .Data_EX_MEM(EXMEMBuffer[15:0]),
-    .Dst_MEM_WB(3'd3),
-    .WB_MEM_WB(1'b0),
-    .Data_MEM_WB(16'd561),
+    .Dst_MEM_WB(MEMWBBuffer[18:16]),
+    .WB_MEM_WB(MEMWBBuffer[19]),
+    .Data_MEM_WB(MEMWBBuffer[15:0]),
     .Data_Dst(Forwarding_Unit_Data1),
     .Data_Src(Forwarding_Unit_Data2),
     .Selectors(Selectors_Forwarding_Unit)
@@ -210,7 +207,7 @@ module Processor();
 
     /*Flags From Memory*/
     /*NF|CF|ZF*/
-    .Flags_From_Memory(Flags_From_Memory),
+    .Flags_From_Memory(out_flags),
 
     /*Input Port*/
     .INPUT_PORT(INPUT_PORT),
@@ -299,23 +296,51 @@ module Processor();
         Instruction={8'b00000000,3'b111,3'b001,2'b00};
 
         #DELAY;
-        /*SUB 254(R7),127(R1)*/
+        /*LDM R3, 10*/
         Write_Address=Write_Address+1;
-        Instruction={8'b00000001,3'b111,3'b001,2'b00};
+        Instruction={8'b01100000,3'b011,3'b011,2'b00};
+
+        #DELAY
+        /*Immediate Value 10, For LDM*/
+        Write_Address=Write_Address+1;
+        Instruction={16'd10};
+
+        #DELAY;
+        /*INC R3*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_000_000,3'b011,3'b011,2'b00};
+
+        #DELAY;
+        /*DEC R7*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_000_000,3'b111,3'b011,2'b00};
+        
+        #DELAY;
+        /*ADD 0(R4),127(R1)*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b00000000,3'b100,3'b001,2'b00};
+
+        #DELAY;
+        /*SHL R4, 8*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b01_000_100,3'b111,3'b011,2'b00};
+
+        #DELAY
+        /*Immediate Value 8, For SHL*/
+        Write_Address=Write_Address+1;
+        Instruction={16'd8};
 
         #DELAY;
 
         Write_Enable=1'b0;
 
         reset = 1'b1;
-        Flags_From_Memory=3'b000;
         INPUT_PORT=16'd12;
         clk=0;
         #DELAY;
         reset = 1'b0;
 
-        #MEMDELAY
-        reset = 1'b1;
+        #MEMDELAY;
 
     end
 
