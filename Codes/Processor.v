@@ -108,18 +108,21 @@ module Processor();
     .To_PC_Selector(To_PC_Selector),
     .MemWSP(MemWSP),
     .accPC(Accumulated_PC),
-    .Dst(EXMEMBuffer[31:0])
+    .Dst(EX_MEM_input[31:0])
     );
 
     /*Instruction Memory*/
-    Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]));
+    reg reset_ins;
+    Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]),.reset(reset_ins));
 
     assign IF_ID_input[47:16]=PC_OUT;
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
     assign stall_IF_ID = Keep_Fetched_Instruction;
-    IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk), .reset(reset), .stall(stall_IF_ID));
+    wire flush_IF_ID;
+    assign flush_IF_ID = To_PC_Selector;
+    IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk), .reset(reset), .stall(stall_IF_ID),.flush(flush_IF_ID));
 
     /*Control Unit*/
     CU CTRLUNIT (
@@ -187,7 +190,7 @@ module Processor();
     /*Output Port*/
     OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
     wire flush_ID_EX;
-    assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector;
+    assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector;
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX));
 
@@ -302,105 +305,130 @@ module Processor();
         IFIDBuffer,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EXMEMBuffer[70],
         EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer, JMP, MEMWBBuffer, Accumulated_PC, Keep_Fetched_Instruction
         );
+        reset_ins=1'b1;
+        #MEMDELAY;
+        reset_ins=1'b0;
         Write_Enable=1'b1;
         
-        /*LDM R1, 127*/
+        /*0 LDM R1, 127*/
         Write_Address=32'd32;
         Instruction={8'b01100000,3'b001,3'b001,2'b00};
 
         #DELAY
-        /*Immediate Value 127, For LDM*/
+        /*1 Immediate Value 127, For LDM*/
         Write_Address=Write_Address+1;
         Instruction={16'd127};
 
         #DELAY;
 
-        /*MOV R7,R1 (127)*/
+        /*2 MOV R7,R1 (127)*/
         Write_Address = Write_Address+1;
         Instruction={8'b00100000,3'b111,3'b001,2'b00};
 
         #DELAY;
-        /*ADD 127(R7),127(R1)*/
+        /*3 ADD 127(R7),127(R1)*/
         Write_Address=Write_Address+1;
         Instruction={8'b00000000,3'b111,3'b001,2'b00};
 
         #DELAY;
-        /*LDM R3, 10*/
+        /*4 LDM R3, 10*/
         Write_Address=Write_Address+1;
         Instruction={8'b01100000,3'b011,3'b011,2'b00};
 
         #DELAY
-        /*Immediate Value 10, For LDM*/
+        /*5 Immediate Value 10, For LDM*/
         Write_Address=Write_Address+1;
         Instruction={16'd10};
 
         #DELAY;
-        /*INC R3*/
+        /*6 INC R3*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_000_000,3'b011,3'b011,2'b00};
 
         #DELAY;
-        /*DEC R7*/
+        /*7 DEC R7*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_000_000,3'b111,3'b011,2'b00};
         
         #DELAY;
-        /*ADD 0(R4),127(R1)*/
+        /*8 ADD 0(R4),127(R1)*/
         Write_Address=Write_Address+1;
         Instruction={8'b00000000,3'b100,3'b001,2'b00};
 
         #DELAY;
-        /*SHL R4, 8*/
+        /*9 SHL R4, 8*/
         Write_Address=Write_Address+1;
         Instruction={8'b01_000_100,3'b111,3'b011,2'b00};
 
         #DELAY
-        /*Immediate Value 8, For SHL*/
+        /*10 Immediate Value 8, For SHL*/
         Write_Address=Write_Address+1;
         Instruction={16'd8};
 
         #DELAY;
-        /*STD R0, R1*/
+        /*11 STD R0, R1*/
         Write_Address=Write_Address+1;
         Instruction={8'b00_010_000,3'b000,3'b001,2'b00};
 
         #DELAY;
-        /*LDD R6, R0*/
+        /*12 LDD R6, R0*/
         Write_Address=Write_Address+1;
         Instruction={8'b00_001_000,3'b110,3'b000,2'b00};
 
 
         #DELAY;
-        /*ADD R6,R3*/
+        /*13 ADD R6,R3*/
         Write_Address=Write_Address+1;
         Instruction={8'b00000000,3'b110,3'b011,2'b00};
 
         
          #DELAY;
-        /*PUSH R6*/
+        /*14 PUSH R6*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_111_000,3'b110,3'b110,2'b00};
 
 
         #DELAY;
-        /*POP R0*/
+        /*15 POP R0*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_111_001,3'b000,3'b000,2'b00};
 
         #DELAY;
-        /*PUSH R0*/
+        /*16 LDM R5, 50*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b01100000,3'b101,3'b101,2'b00};
+
+        #DELAY
+        /*17 Immediate Value 50, For LDM*/
+        Write_Address=Write_Address+1;
+        Instruction={16'd50};
+
+        #DELAY;
+        /*18 PUSH R0*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_111_000,3'b000,3'b000,2'b00};
+
+        #DELAY;
+        /*19 JMP R5*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_011_011,3'b101,3'b101,2'b00};
+
+        #DELAY;
+        /*20 DEC R7*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_000_000,3'b111,3'b011,2'b00};
+
+
+
 
 
         #DELAY;
 
 
         Write_Enable=1'b0;
-
         reset = 1'b1;
-        INPUT_PORT=16'd12;
         clk=0;
+        INPUT_PORT=16'd12;
         #DELAY;
         reset = 1'b0;
 
