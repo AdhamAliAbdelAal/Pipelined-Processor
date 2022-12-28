@@ -354,14 +354,16 @@ module Processor();
         Instruction={8'b00_010_000,3'b000,3'b001,2'b00};
 
         #DELAY;
-        /*LDD R0, R6*/
+        /*LDD R6, R0*/
         Write_Address=Write_Address+1;
         Instruction={8'b00_001_000,3'b110,3'b000,2'b00};
 
+
         #DELAY;
-        /*PUSH R7*/
+        /*ADD R6,R3*/
         Write_Address=Write_Address+1;
-        Instruction={8'b10_111_000,3'b111,3'b111,2'b00};
+        Instruction={8'b00000000,3'b110,3'b011,2'b00};
+
         
          #DELAY;
         /*PUSH R6*/
@@ -370,9 +372,14 @@ module Processor();
 
 
         #DELAY;
-        /*PUSH R6*/
+        /*POP R0*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_111_001,3'b000,3'b000,2'b00};
+
+        #DELAY;
+        /*PUSH R0*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_111_000,3'b000,3'b000,2'b00};
 
 
         #DELAY;
