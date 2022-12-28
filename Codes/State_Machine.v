@@ -9,6 +9,7 @@ module State_Machine (
     initial begin
         State_Reg=2'b00;
         State_Next=2'b00;
+        Machine_Stack = 2'b00;
         Stall_Signal=1'b0;
     end
 

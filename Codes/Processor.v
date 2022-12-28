@@ -343,6 +343,21 @@ module Processor();
         Instruction={8'b00_001_000,3'b110,3'b000,2'b00};
 
         #DELAY;
+        /*PUSH R7*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_111_000,3'b111,3'b111,2'b00};
+        
+         #DELAY;
+        /*PUSH R6*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_111_000,3'b110,3'b110,2'b00};
+
+        
+
+
+
+        #DELAY;
+
 
         Write_Enable=1'b0;
 
