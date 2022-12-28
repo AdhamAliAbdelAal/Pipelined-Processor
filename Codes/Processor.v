@@ -97,9 +97,19 @@ module Processor();
     wire [2:0] out_flags;
     wire [31:0] Accumulated_PC;
     wire Stall_Signal;
+    wire MemWSP;
 
     /*PC*/
-    Program_Counter PC(.reset(reset) ,.clk(clk), .PC_Out(PC_OUT), .stall(Keep_PC));
+    Program_Counter PC(.reset(reset) ,
+    .clk(clk), 
+    .PC_Out(PC_OUT), 
+    .stall(Keep_PC),
+    .INT(1'b0),
+    .To_PC_Selector(To_PC_Selector),
+    .MemWSP(MemWSP),
+    .accPC(Accumulated_PC),
+    .Dst(EXMEMBuffer[31:0])
+    );
 
     /*Instruction Memory*/
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]));
@@ -278,7 +288,8 @@ module Processor();
     .out_flags(out_flags),
     .Accumulated_PC(Accumulated_PC),
     .Stall_Signal(Stall_Signal),
-    .flag_selector(flag_selector)
+    .flag_selector(flag_selector),
+    .MemWSP(MemWSP)
 );
 
     /*MEM/WB Buffer*/

@@ -16,7 +16,7 @@ module State_Machine (
     // assign {Stack_PC,Stack_Flags} = (State_Machine_Out===2'b01 )?2'b00:{Stack_PC,Stack_Flags};
     
 
-    always @(posedge clk) begin
+    always @(negedge clk) begin
         if(State_Reg==2'b00 && Stack_PC==1'b1 && Stack_Flags==1'b1)
         begin
             State_Reg=2'b11;
