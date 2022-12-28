@@ -1,5 +1,5 @@
 `include "Memory.v"
-module MemoryUnit(EX_MEM_input,out_flags,clk,Accumulated_PC,Stall_Signal,MEM_Output);
+module MemoryUnit(EX_MEM_input,flag_selector,out_flags,clk,Accumulated_PC,Stall_Signal,MEM_Output);
 //   74:43      42:40       39     38       37         36:5          4          3                2              1            0
 //  32bit_data|3bit_Dst|1bit_MR|1bit_MW|1bit_WB| 32bit_Address|1bit_JWSP|1bit_stackPC|1bit_stackFlags|3bits_Flags|1bit_isStackOp|1bit_StackOp   
 //  0:31        32:34    35       36      37       38:69         70        71           72                73:75     76               77
@@ -7,6 +7,7 @@ module MemoryUnit(EX_MEM_input,out_flags,clk,Accumulated_PC,Stall_Signal,MEM_Out
     input [77:0]  EX_MEM_input;
     input clk;
     output [19:0] MEM_Output;
+    output flag_selector;
     output [2:0]out_flags;
 
 
@@ -67,7 +68,7 @@ module MemoryUnit(EX_MEM_input,out_flags,clk,Accumulated_PC,Stall_Signal,MEM_Out
  	,.MR(EX_MEM_input[35]),.clk(clk));
 
     Accumulator acc(.clk(clk),.flags(out_flags),.State_Machine_Out(State_Machine_Out),.in(MR_Data),.outPC(Accumulated_PC),
-                    .Stack_PC(EX_MEM_input[71]),.Stack_Flags(EX_MEM_input[72]));
+                    .Stack_PC(EX_MEM_input[71]),.Stack_Flags(EX_MEM_input[72]),.flag_selector(flag_selector),.MR(EX_MEM_input[35]));
 
     assign outData = (!EX_MEM_input[70] && EX_MEM_input[35])?MR_Data:EX_MEM_input[15:0];
 

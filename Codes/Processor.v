@@ -160,10 +160,12 @@ module Processor();
 
     /*Output Port*/
     OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
-    
+    wire flush_ID_EX;
+    assign flush_ID_EX=IDEXBuffer[88];
     /*ID/EX Buffer*/
-    ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(IDEXBuffer[88]));
+    ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX));
 
+    wire flag_selector;
     /*Execution Unit*/
     ExecutionUnit EXUNIT (
     /*Inputs From Buffer*/
@@ -246,8 +248,7 @@ module Processor();
     .To_PC_Selector(To_PC_Selector),
 
     /*Data From EX/MEM Buffer*/
-    .MEM_Stack_Flags(EXMEMBuffer[72]),
-    .MEM_MR(EXMEMBuffer[35])
+    .MEM_Stack_Flags(flag_selector)
 );
 
     /*EX/MEM Buffer*/
@@ -260,7 +261,8 @@ module Processor();
     .MEM_Output(MEM_WB_input),
     .out_flags(out_flags),
     .Accumulated_PC(Accumulated_PC),
-    .Stall_Signal(Stall_Signal)
+    .Stall_Signal(Stall_Signal),
+    .flag_selector(flag_selector)
 );
 
     /*MEM/WB Buffer*/
@@ -329,6 +331,16 @@ module Processor();
         /*Immediate Value 8, For SHL*/
         Write_Address=Write_Address+1;
         Instruction={16'd8};
+
+        #DELAY;
+        /*STD R0, R1*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b00_010_000,3'b000,3'b001,2'b00};
+
+        #DELAY;
+        /*LDD R0, R6*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b00_001_000,3'b110,3'b000,2'b00};
 
         #DELAY;
 
