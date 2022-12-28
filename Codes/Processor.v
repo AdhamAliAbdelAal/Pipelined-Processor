@@ -11,7 +11,7 @@
 `include "DecodingStage.v"
 `include "IF_ID.v"
 `include "MemoryUnit.v"
-
+`include "Load_Use.v"
 /*ID/EX Buffer 91 bit*/
 /*
 1: IOR                                |  0 
@@ -89,13 +89,17 @@ module Processor();
     reg [31:0] Write_Address;
     reg Write_Enable;
 
+    /*Load Use*/
+    
+    wire Keep_Fetched_Instruction, Keep_PC, Flush_MUX_Selector;
+
     /*Memory Outs*/
     wire [2:0] out_flags;
     wire [31:0] Accumulated_PC;
     wire Stall_Signal;
 
     /*PC*/
-    Program_Counter PC(.reset(reset) ,.clk(clk), .PC_Out(PC_OUT));
+    Program_Counter PC(.reset(reset) ,.clk(clk), .PC_Out(PC_OUT), .stall(Keep_PC));
 
     /*Instruction Memory*/
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]));
@@ -103,7 +107,9 @@ module Processor();
     assign IF_ID_input[47:16]=PC_OUT;
 
     /*IF/ID Buffer*/
-    IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk),.reset(reset));
+    wire stall_IF_ID;
+    assign stall_IF_ID = Keep_Fetched_Instruction;
+    IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk), .reset(reset), .stall(stall_IF_ID));
 
     /*Control Unit*/
     CU CTRLUNIT (
@@ -133,6 +139,16 @@ module Processor();
     assign ID_EX_input[43:41]=IFIDBuffer[7:5];
     assign ID_EX_input[87:85]=IFIDBuffer[4:2];
 
+    Load_Use_Case Load_Use(
+         .MR(IDEXBuffer[44]),
+         .EXEC_Dst(IDEXBuffer[43:41]), 
+         .DEC_Src1(IFIDBuffer[4:2]), 
+         .DEC_Src2(IFIDBuffer[7:5]), 
+         .Keep_Fetched_Instruction(Keep_Fetched_Instruction), 
+         .Keep_PC(Keep_PC), 
+         .Flush_MUX_Selector(Flush_MUX_Selector)
+    );
+
     /*Decoding Stage*/
     DecodingStage DECSTAGE (.write_back(MEMWBBuffer[19]), .read_data1(ID_EX_input[24:9]), .alu_input2(ID_EX_input[40:25]),  .write_data(MEMWBBuffer[15:0]), .clk(clk),.reset(reset),
     .src_addr(IFIDBuffer[4:2]),.dst_addr(IFIDBuffer[7:5]),.write_addr(MEMWBBuffer[18:16]));
@@ -161,7 +177,7 @@ module Processor();
     /*Output Port*/
     OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
     wire flush_ID_EX;
-    assign flush_ID_EX=IDEXBuffer[88];
+    assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector;
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX));
 
@@ -271,9 +287,9 @@ module Processor();
     reg [8*50:1] instuction;
 
     initial begin
-        $monitor("IF/ID=%b,IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d, JMP_Flag=%b, MEM_WB_Buffer = %b, Accumulated_PC=%d",
+        $monitor("IF/ID=%b,IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d, JMP_Flag=%b, MEM_WB_Buffer = %b, Accumulated_PC=%d, Keep_Fetched_Instruction=%b",
         IFIDBuffer,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EXMEMBuffer[70],
-        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer, JMP, MEMWBBuffer, Accumulated_PC
+        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer, JMP, MEMWBBuffer, Accumulated_PC, Keep_Fetched_Instruction
         );
         Write_Enable=1'b1;
         
@@ -353,7 +369,7 @@ module Processor();
         Instruction={8'b10_111_000,3'b110,3'b110,2'b00};
 
 
-         #DELAY;
+        #DELAY;
         /*PUSH R6*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_111_001,3'b000,3'b000,2'b00};
