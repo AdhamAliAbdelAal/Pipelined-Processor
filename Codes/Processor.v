@@ -401,25 +401,40 @@ module Processor();
         #DELAY
         /*17 Immediate Value 50, For LDM*/
         Write_Address=Write_Address+1;
-        Instruction={16'd50};
+        Instruction={16'd52};
 
         #DELAY;
-        /*18 PUSH R0*/
+        /*18 LDM R2, 1*/
         Write_Address=Write_Address+1;
-        Instruction={8'b10_111_000,3'b000,3'b000,2'b00};
+        Instruction={8'b01100000,3'b010,3'b010,2'b00};
 
-        #DELAY;
-        /*19 JMP R5*/
+        #DELAY
+        /*19 Immediate Value 1, For LDM*/
         Write_Address=Write_Address+1;
-        Instruction={8'b10_011_011,3'b101,3'b101,2'b00};
+        Instruction={16'd1};
+
 
         #DELAY;
-        /*20 DEC R7*/
+        /*20 INC R7*/
         Write_Address=Write_Address+1;
         Instruction={8'b10_000_000,3'b111,3'b011,2'b00};
 
+        #DELAY;
+        /*21 DEC R2*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_000_001,3'b010,3'b010,2'b00};
 
+        #DELAY;
+        /*22 JZ R5*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b10_011_000,3'b101,3'b101,2'b00};
 
+        
+
+        #DELAY;
+        /*13 ADD R6,R3*/
+        Write_Address=Write_Address+1;
+        Instruction={8'b00000000,3'b110,3'b011,2'b00};
 
 
         #DELAY;
