@@ -173,7 +173,7 @@ module ExecutionUnit(
     assign Taken_Jump = Jump_On_Which_Flag & JMP;
 
 
-    assign Data =  (Taken_Jump & SP)? PC: {{16{1'b0}},Data_To_Use}; 
+    assign Data =  ((Taken_Jump & SP)|Stack_PC)? PC: {{16{1'b0}},Data_To_Use}; 
     
 
     /* Level 4 Address*/
