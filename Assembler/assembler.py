@@ -20,20 +20,20 @@ def main():
                     reg2=second_split[1][:2]
                     opCode+=registers[reg2]
                     opCode+=('0'*2)
-                    f.write(opCode+'\n')
                 elif(opCode[:2]=='01'):
                     reg1=second_split[0]
                     opCode+=registers[reg1]
                     opCode+=('0'*5)
                     f.write(opCode+'\n')
                     imm=int(second_split[1][:-1],16)&65535
-                    print(imm,f'{imm:016b}')
-                    opCode=(f'{imm:16b}')
-                    f.write("imm"+opCode+'\n')
-                    
-                
-            
-            
+                    opCode=(f'{imm:016b}')
+                elif(opCode[:2]=='10'):
+                    reg1=second_split[0][:-1]
+                    opCode+=registers[reg1]
+                    opCode+=('0'*5)
+                elif(opCode[:2]=='11'):
+                    opCode+=('0'*8)
+                f.write(opCode+'\n')
     f.close()
 
 
