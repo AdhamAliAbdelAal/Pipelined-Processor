@@ -17,8 +17,8 @@ always@(negedge clk)
 begin
 if(reset)
 begin
-  for (i=0; i<16; i=i+1) begin
-	registers[i]=8'd0;
+  for (i=0; i<8; i=i+1) begin
+	registers[i]=16'd0;
   end
 end
 else if(write_back) 

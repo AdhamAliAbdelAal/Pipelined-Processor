@@ -299,6 +299,8 @@ module Processor();
     MEM_WB MEMWB(.DataIn(MEM_WB_input), .Buffer(MEMWBBuffer), .clk(clk), .reset(reset), .flush(1'b0));
 
     reg [8*50:1] instuction;
+    reg [32:0] data_from_file;
+    integer fd; // file handler
 
     initial begin
         $monitor("IF/ID=%b,IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d, JMP_Flag=%b, MEM_WB_Buffer = %b, Accumulated_PC=%d, Keep_Fetched_Instruction=%b",
@@ -309,141 +311,22 @@ module Processor();
         #MEMDELAY;
         reset_ins=1'b0;
         Write_Enable=1'b1;
-        
-        /*0 LDM R1, 127*/
-        Write_Address=32'd32;
-        Instruction={8'b01100000,3'b001,3'b001,2'b00};
 
-        #DELAY
-        /*1 Immediate Value 127, For LDM*/
-        Write_Address=Write_Address+1;
-        Instruction={16'd127};
-
-        #DELAY;
-
-        /*2 MOV R7,R1 (127)*/
-        Write_Address = Write_Address+1;
-        Instruction={8'b00100000,3'b111,3'b001,2'b00};
-
-        #DELAY;
-        /*3 ADD 127(R7),127(R1)*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00000000,3'b111,3'b001,2'b00};
-
-        #DELAY;
-        /*4 LDM R3, 10*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b01100000,3'b011,3'b011,2'b00};
-
-        #DELAY
-        /*5 Immediate Value 10, For LDM*/
-        Write_Address=Write_Address+1;
-        Instruction={16'd10};
-
-        #DELAY;
-        /*6 INC R3*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_000_000,3'b011,3'b011,2'b00};
-
-        #DELAY;
-        /*7 DEC R7*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_000_000,3'b111,3'b011,2'b00};
-        
-        #DELAY;
-        /*8 ADD 0(R4),127(R1)*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00000000,3'b100,3'b001,2'b00};
-
-        #DELAY;
-        /*9 SHL R4, 8*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b01_000_100,3'b111,3'b011,2'b00};
-
-        #DELAY
-        /*10 Immediate Value 8, For SHL*/
-        Write_Address=Write_Address+1;
-        Instruction={16'd8};
-
-        #DELAY;
-        /*11 STD R0, R1*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00_010_000,3'b000,3'b001,2'b00};
-
-        #DELAY;
-        /*12 LDD R6, R0*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00_001_000,3'b110,3'b000,2'b00};
-
-
-        #DELAY;
-        /*13 ADD R6,R3*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00000000,3'b110,3'b011,2'b00};
-
-        
-         #DELAY;
-        /*14 PUSH R6*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_111_000,3'b110,3'b110,2'b00};
-
-
-        #DELAY;
-        /*15 POP R0*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_111_001,3'b000,3'b000,2'b00};
-
-        #DELAY;
-        /*16 LDM R5, 50*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b01100000,3'b101,3'b101,2'b00};
-
-        #DELAY
-        /*17 Immediate Value 50, For LDM*/
-        Write_Address=Write_Address+1;
-        Instruction={16'd52};
-
-        #DELAY;
-        /*18 LDM R2, 1*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b01100000,3'b010,3'b010,2'b00};
-
-        #DELAY
-        /*19 Immediate Value 1, For LDM*/
-        Write_Address=Write_Address+1;
-        Instruction={16'd1};
-
-
-        #DELAY;
-        /*20 INC R7*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_000_000,3'b111,3'b011,2'b00};
-
-        #DELAY;
-        /*21 DEC R2*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_000_001,3'b010,3'b010,2'b00};
-
-        #DELAY;
-        /*22 JZ R5*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_011_000,3'b101,3'b101,2'b00};
-
-        #DELAY;
-        /*23 JC R5*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b10_011_010,3'b101,3'b101,2'b00};
-
-        
-
-        #DELAY;
-        /*24 ADD R6,R3*/
-        Write_Address=Write_Address+1;
-        Instruction={8'b00000000,3'b110,3'b011,2'b00};
-
-
-        #DELAY;
-
+        fd=$fopen("../Assembler/ins_mem.txt", "r");  
+        while (!$feof(fd)) 
+        begin  
+            $fscanf(fd, "%b\n", data_from_file);
+            if(data_from_file[32]==1'b1)
+            begin
+                Write_Address=data_from_file[31:0];
+            end
+            else 
+            begin
+                Instruction=data_from_file[15:0];
+                Write_Address=Write_Address+1;
+                #DELAY;
+            end 
+        end
 
         Write_Enable=1'b0;
         reset = 1'b1;

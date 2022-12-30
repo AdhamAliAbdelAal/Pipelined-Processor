@@ -5,9 +5,12 @@ def main():
     with open("code.asm",'r') as openfileobject:
         for (i,line) in enumerate(openfileobject):
             line=line.upper()
-            #print(line.split(' '))
             first_split=line.split(' ')
             ins=first_split[0]
+            if(ins=='.ORG'):
+                imm=int(first_split[1][:-1],16)&((1<<32)-1)
+                opCode=(f'{imm:032b}')
+                f.write('1'+opCode+'\n')
             opCode=''
             if ins in instructions:
                 opCode=instructions[ins]
