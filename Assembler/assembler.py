@@ -29,6 +29,7 @@ def main():
                     opCode+=('0'*5)
                     f.write(opCode+'\n')
                     imm=int(second_split[1][:-1],16)&65535
+                    print(imm)
                     opCode=(f'{imm:016b}')
                 elif(opCode[:2]=='10'):
                     reg1=second_split[0][:-1]
