@@ -1,0 +1,12 @@
+add wave -position end  sim:/Processor/IDEX/clk
+add wave -position end  sim:/Processor/IDEX/reset
+add wave -position end  sim:/Processor/IDEX/flush
+add wave -position end  sim:/Processor/To_PC_Selector
+add wave -position end  sim:/Processor/Flush_MUX_Selector
+add wave -position end  sim:/Processor/IDEXBuffer[88]
+add wave -position end  sim:/Processor/CTRLUNIT/Imm
+add wave -position end  sim:/Processor/EXMEMBuffer[70]
+add wave -position end  sim:/Processor/ID_EX_input[90]
+add wave -position end  sim:/Processor/ID_EX_input[89]
+add wave -position end  sim:/Processor/IDEXBuffer[90]
+add wave -position end  sim:/Processor/IDEXBuffer[89]

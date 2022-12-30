@@ -9,7 +9,7 @@ input INT;
 output WB, ALU,Imm,Selector,MR,MW,Jmp,IOR,IOW,Stack_PC,Stack_Flags,IsStackOp,StackOp,JWSP;
 output [1:0] Flag_Selector;
 output [2:0] ALU_Ops;
-output [1:0] FD ; 
+output [1:0] FD ;
 
 wire Call;
 wire IsCarryOp,CarryOp;

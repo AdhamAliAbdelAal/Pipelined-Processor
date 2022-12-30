@@ -59,8 +59,8 @@ module Processor();
     localparam DELAY=2*CLK;
     localparam MEMDELAY=5*DELAY;
 
-    wire [47:0] IF_ID_input;
-    wire [47:0] IFIDBuffer;
+    wire [48:0] IF_ID_input;
+    wire [48:0] IFIDBuffer;
 
     wire [90:0] ID_EX_input;
     wire [90:0] IDEXBuffer;
@@ -89,6 +89,8 @@ module Processor();
     reg [31:0] Write_Address;
     reg Write_Enable;
 
+    reg INT;
+
     /*Load Use*/
     
     wire Keep_Fetched_Instruction, Keep_PC, Flush_MUX_Selector;
@@ -104,7 +106,7 @@ module Processor();
     .clk(clk), 
     .PC_Out(PC_OUT), 
     .stall(Keep_PC),
-    .INT(1'b0),
+    .INT(IFIDBuffer[48]),
     .To_PC_Selector(To_PC_Selector),
     .MemWSP(MemWSP),
     .accPC(Accumulated_PC),
@@ -121,13 +123,14 @@ module Processor();
     wire stall_IF_ID;
     assign stall_IF_ID = Keep_Fetched_Instruction;
     wire flush_IF_ID;
-    assign flush_IF_ID = To_PC_Selector;
+    assign flush_IF_ID = To_PC_Selector | EXMEMBuffer[70];
+    assign IF_ID_input[48]=INT;
     IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk), .reset(reset), .stall(stall_IF_ID),.flush(flush_IF_ID));
 
     /*Control Unit*/
     CU CTRLUNIT (
         .Opcode(IFIDBuffer[15:8]),
-        .INT(1'b0),
+        .INT(IFIDBuffer[48]),
         .WB(ID_EX_input[46]),
         .ALU(ID_EX_input[6]),
         .ALU_Ops(ID_EX_input[5:3]),
@@ -190,7 +193,7 @@ module Processor();
     /*Output Port*/
     OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
     wire flush_ID_EX;
-    assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector;
+    assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector | EXMEMBuffer[70];
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX));
 
@@ -302,6 +305,8 @@ module Processor();
     reg [32:0] data_from_file;
     integer fd; // file handler
 
+    integer count;
+
     initial begin
         $monitor("IF/ID=%b,IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d, JMP_Flag=%b, MEM_WB_Buffer = %b, Accumulated_PC=%d, Keep_Fetched_Instruction=%b",
         IFIDBuffer,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EXMEMBuffer[70],
@@ -311,6 +316,7 @@ module Processor();
         #MEMDELAY;
         reset_ins=1'b0;
         Write_Enable=1'b1;
+        count=0;
 
         fd=$fopen("../Assembler/ins_mem.txt", "r");  
         while (!$feof(fd)) 
@@ -342,6 +348,18 @@ module Processor();
     always begin
         #CLK;
         clk=~clk;
+    end
+
+    always @(posedge clk)
+    begin  
+        if(count==6)
+        begin
+            INT=1'b1;
+        end
+        else begin
+            INT=1'b0;
+        end
+        count=count+1;
     end
 
 
