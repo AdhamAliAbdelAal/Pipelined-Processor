@@ -120,7 +120,7 @@ module ExecutionUnit(
 
     assign Immediate_Or_Register= (IMM==1'b1)?Immediate_Value:Data2;
 
-    assign Data_Or_One= (Forwarding_Unit_Selectors[1]==1'b1)?Data_From_Forwarding_Unit2:Immediate_Or_Register;
+    assign Data_Or_One= (Forwarding_Unit_Selectors[1]==1'b1&&IMM==1'b0)?Data_From_Forwarding_Unit2:Immediate_Or_Register;
 
     assign Operand2= (OPS==1'b1)?16'd1:Data_Or_One;
 

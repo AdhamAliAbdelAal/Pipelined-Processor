@@ -6,6 +6,7 @@ def main():
         for (i,line) in enumerate(openfileobject):
             line=line.upper()
             first_split=line.split(' ')
+            print(first_split)
             ins=first_split[0]
             if(ins=='.ORG'):
                 imm=int(first_split[1][:-1],16)&((1<<32)-1)
@@ -28,11 +29,17 @@ def main():
                     opCode+=registers[reg1]
                     opCode+=('0'*5)
                     f.write(opCode+'\n')
-                    imm=int(second_split[1][:-1],16)&65535
+                    if(second_split[1][-1]=='\n'):
+                        imm=int(second_split[1][:-1],16)&65535
+                    else:
+                        imm=int(second_split[1],16)&65535
                     print(imm)
                     opCode=(f'{imm:016b}')
                 elif(opCode[:2]=='10'):
-                    reg1=second_split[0][:-1]
+                    if(second_split[0][-1]=='\n'):
+                        reg1=second_split[0][:-1]
+                    else:
+                        reg1=second_split[0]
                     opCode+=registers[reg1]
                     opCode+=('0'*5)
                 elif(opCode[:2]=='11'):
