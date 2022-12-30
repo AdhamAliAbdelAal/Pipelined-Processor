@@ -8,6 +8,8 @@ def main():
             first_split=line.split(' ')
             print(first_split)
             ins=first_split[0]
+            if(ins[-1]=='\n'):
+                ins=ins[:-1]
             if(ins=='.ORG'):
                 imm=int(first_split[1][:-1],16)&((1<<32)-1)
                 opCode=(f'{imm:032b}')
