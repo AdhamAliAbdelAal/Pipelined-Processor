@@ -89,6 +89,9 @@ module ExecutionUnit(
     /*For Jumps*/
     Taken_Jump, 
 
+    /*out for pc */
+    Data_To_Use,
+
     /* Output Signals */
     /*PC Selectors*/
     To_PC_Selector,
@@ -105,13 +108,13 @@ module ExecutionUnit(
     /*Outputs*/
     output MR_Out,MW_Out,WB_Out,JWSP_Out,Stack_PC_Out,Stack_Flags_Out, Taken_Jump, To_PC_Selector, SP_Out, SPOP_Out;
     output [2:0] WB_Address_Out,Final_Flags;
-    output [15:0] OUTPUT_PORT;
+    output [15:0] OUTPUT_PORT,Data_To_Use;
     output [31:0] Data,Address, Stack_Pointer_Out;
 
     /*Connections*/
     wire Temp_CF,Select_Flags_Or_From_Memory, Jump_On_Which_Flag;
     wire [2:0] Flags_From_Decision,Flags_Out;
-    wire [15:0] Operand1,Operand2,Immediate_Or_Register,Data_Or_One,Data_From_ALU,Data_To_Use;
+    wire [15:0] Operand1,Operand2,Immediate_Or_Register,Data_Or_One,Data_From_ALU;
     wire [31:0] SP_From_Adder_Subtractor, Push_Or_Pop_Stack_Pointer;
 
 

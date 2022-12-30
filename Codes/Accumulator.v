@@ -14,7 +14,7 @@ reg [31:0] tmp;
  end
 
 
-  always @(negedge clk) 
+  always @(posedge clk) 
     begin 
       if(State_Machine_Out==2'b11 )
       begin
@@ -31,7 +31,7 @@ reg [31:0] tmp;
         begin
           if(MR==1'b1)
         begin 
-          MemWSP= 1'b0;
+          MemWSP= 1'b1;
         end
           tmp[31:16] = in;
           flag_selector= 1'b1;
@@ -61,7 +61,7 @@ reg [31:0] tmp;
           flag_selector= 1'b0;
           if(MR==1'b1)
         begin
-          MemWSP= 1'b0;
+          MemWSP= 1'b1;
         end
         end
       end
@@ -69,6 +69,7 @@ reg [31:0] tmp;
       begin
         tmp = tmp; 
         flag_selector= 1'b0;
+        MemWSP= 1'b0;
       end
     end 
   assign outPC = tmp; 

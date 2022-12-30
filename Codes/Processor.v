@@ -100,6 +100,7 @@ module Processor();
     wire [31:0] Accumulated_PC;
     wire Stall_Signal;
     wire MemWSP;
+    wire [15:0] Data_To_Use;
 
     /*PC*/
     Program_Counter PC(.reset(reset) ,
@@ -110,14 +111,14 @@ module Processor();
     .To_PC_Selector(To_PC_Selector),
     .MemWSP(MemWSP),
     .accPC(Accumulated_PC),
-    .Dst(EX_MEM_input[31:0])
+    .Dst({{16{1'b0}},Data_To_Use})
     );
 
     /*Instruction Memory*/
     reg reset_ins;
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]),.reset(reset_ins));
 
-    assign IF_ID_input[47:16]=PC_OUT;
+    assign IF_ID_input[47:16]=PC_OUT+1;
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
@@ -280,7 +281,10 @@ module Processor();
     .To_PC_Selector(To_PC_Selector),
 
     /*Data From EX/MEM Buffer*/
-    .MEM_Stack_Flags(flag_selector)
+    .MEM_Stack_Flags(flag_selector),
+
+    /*data to pc*/
+    .Data_To_Use(Data_To_Use)
 );
 
     /*EX/MEM Buffer*/
@@ -313,6 +317,7 @@ module Processor();
         EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer, JMP, MEMWBBuffer, Accumulated_PC, Keep_Fetched_Instruction
         );
         reset_ins=1'b1;
+        INT=1'b0;
         #MEMDELAY;
         reset_ins=1'b0;
         Write_Enable=1'b1;
@@ -329,8 +334,8 @@ module Processor();
             else 
             begin
                 Instruction=data_from_file[15:0];
-                Write_Address=Write_Address+1;
                 #DELAY;
+                Write_Address=Write_Address+1;
             end 
         end
 
@@ -350,17 +355,17 @@ module Processor();
         clk=~clk;
     end
 
-    always @(posedge clk)
-    begin  
-        if(count==6)
-        begin
-            INT=1'b1;
-        end
-        else begin
-            INT=1'b0;
-        end
-        count=count+1;
-    end
+    // always @(posedge clk)
+    // begin  
+    //     if(count==6)
+    //     begin
+    //         INT=1'b1;
+    //     end
+    //     else begin
+    //         INT=1'b0;
+    //     end
+    //     count=count+1;
+    // end
 
 
 endmodule
