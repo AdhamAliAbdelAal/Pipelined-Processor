@@ -105,7 +105,7 @@ module Processor();
     Program_Counter PC(.reset(reset) ,
     .clk(clk), 
     .PC_Out(PC_OUT), 
-    .stall(Keep_PC),
+    .stall(Keep_PC|Stall_Signal),
     .INT(IFIDBuffer[48]),
     .To_PC_Selector(To_PC_Selector),
     .MemWSP(MemWSP),
@@ -121,7 +121,7 @@ module Processor();
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
-    assign stall_IF_ID = Keep_Fetched_Instruction;
+    assign stall_IF_ID = Keep_Fetched_Instruction|Stall_Signal;
     wire flush_IF_ID;
     assign flush_IF_ID = To_PC_Selector | EXMEMBuffer[70];
     assign IF_ID_input[48]=INT;
@@ -195,7 +195,7 @@ module Processor();
     wire flush_ID_EX;
     assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector | EXMEMBuffer[70];
     /*ID/EX Buffer*/
-    ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX));
+    ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX),.stall(Stall_Signal));
 
     wire flag_selector;
     /*Execution Unit*/
@@ -284,7 +284,7 @@ module Processor();
 );
 
     /*EX/MEM Buffer*/
-    EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk),.reset(reset), .flush(1'b0));
+    EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk),.reset(reset), .flush(1'b0),.stall(Stall_Signal));
 
     /*Memory Unit*/
     MemoryUnit MEMUNIT (
