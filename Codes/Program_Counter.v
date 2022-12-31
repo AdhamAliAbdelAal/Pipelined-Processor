@@ -25,7 +25,7 @@ else if(To_PC_Selector==1'b1)
 begin
     PC_Out = Dst;
 end
-else if (PC_Out<32'd100 && stall===1'b0)begin
+else if (stall===1'b0)begin
 PC_Out=PC_Out + 1;
 end
 end
