@@ -357,7 +357,7 @@ module Processor();
 
     always @(negedge clk)
     begin  
-        if(count==4)
+        if(count==6)
         begin
             INT=1'b1;
         end
