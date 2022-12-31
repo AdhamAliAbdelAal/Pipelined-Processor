@@ -118,7 +118,7 @@ module Processor();
     reg reset_ins;
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]),.reset(reset_ins));
 
-    assign IF_ID_input[47:16]=PC_OUT+1;
+    assign IF_ID_input[47:16]=(INT==1'b0)?PC_OUT+1:PC_OUT;
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
@@ -355,17 +355,17 @@ module Processor();
         clk=~clk;
     end
 
-    // always @(posedge clk)
-    // begin  
-    //     if(count==6)
-    //     begin
-    //         INT=1'b1;
-    //     end
-    //     else begin
-    //         INT=1'b0;
-    //     end
-    //     count=count+1;
-    // end
+    always @(negedge clk)
+    begin  
+        if(count==4)
+        begin
+            INT=1'b1;
+        end
+        else begin
+            INT=1'b0;
+        end
+        count=count+1;
+    end
 
 
 endmodule

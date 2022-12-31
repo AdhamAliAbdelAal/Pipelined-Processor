@@ -30,17 +30,18 @@ reg [31:0] tmp;
         if({Stack_PC,Stack_Flags}==2'b11)
         begin
           if(MR==1'b1)
-        begin 
-          MemWSP= 1'b1;
-        end
+          begin 
+            MemWSP= 1'b1;
+          end
+          else
+          begin
+            MemWSP= 1'b0;
+          end
           tmp[31:16] = in;
           flag_selector= 1'b1;
         end
         else begin
-          if(MR==1'b1)
-        begin 
           MemWSP= 1'b0;
-        end
           tmp[15:0] = in;
           flag_selector= 1'b0;
         end 
@@ -54,15 +55,20 @@ reg [31:0] tmp;
         if(MR==1'b1)
         begin 
           flag_selector= 1'b1;
+          MemWSP= 1'b0;
         end
         end
         else begin
           tmp[31:16] = in;
           flag_selector= 1'b0;
           if(MR==1'b1)
-        begin
-          MemWSP= 1'b1;
-        end
+          begin
+            MemWSP= 1'b1;
+          end
+          else
+          begin
+            MemWSP= 1'b0;
+          end
         end
       end
       else 
