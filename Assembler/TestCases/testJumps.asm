@@ -1,7 +1,5 @@
 .ORG 0
-IN R6
-ADD R1,R1
-DEC R7
+INC R6
 RTI
 IN R5
 

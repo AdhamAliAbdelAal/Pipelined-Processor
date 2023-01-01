@@ -70,9 +70,10 @@ module State_Machine (
         end
         else
         begin
-             State_Machine_Out= 2'b00;
-             Machine_Stack=2'b00;
-             State_Next = 2'b00;
+            Stall_Signal=1'b0;
+            State_Machine_Out= 2'b00;
+            Machine_Stack=2'b00;
+            State_Next = 2'b00;
         end
     end
 
