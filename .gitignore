@@ -1,5 +1,6 @@
 Modelsim
-*.xlsx
 *.dtmp
 *.bkp
+*.xlsx
 TestAssembler
+__pycache__
