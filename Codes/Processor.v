@@ -357,17 +357,17 @@ module Processor();
         clk=~clk;
     end
 
-    always @(negedge clk)
-    begin  
-        if(count==7)
-        begin
-            INT=1'b1;
-        end
-        else begin
-            INT=1'b0;
-        end
-        count=count+1;
-    end
+    // always @(negedge clk)
+    // begin  
+    //     if(count==7)
+    //     begin
+    //         INT=1'b1;
+    //     end
+    //     else begin
+    //         INT=1'b0;
+    //     end
+    //     count=count+1;
+    // end
 
 
 endmodule
