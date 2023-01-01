@@ -3,7 +3,6 @@
 `include "EX_MEM.v"
 `include "FlagRegister.v"
 `include "OUTPUTPORT.v"
-`include "StackPointer.v"
 `include "ForwardingUnit.v"
 `include "Program_Counter.v"
 `include "CU.v"
@@ -77,11 +76,9 @@ module Processor();
     reg clk;
     reg reset;
     reg [15:0] INPUT_PORT;
-    wire [31:0] Stack_Pointer;
     wire [1:0] Selectors_Forwarding_Unit;
     wire [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
     wire [2:0] Flags;
-    wire [31:0] Stack_Pointer_Out;
     wire JMP,To_PC_Selector;
     wire INT_OUT;
     wire [31:0]Data_Out;
@@ -196,8 +193,6 @@ module Processor();
     .Selectors(Selectors_Forwarding_Unit)
     );
 
-    /*Stack Pointer*/
-    StackPointer Stack_Pointer_Register(.DataIn(Stack_Pointer_Out), .Buffer(Stack_Pointer), .clk(clk), .reset(reset));
 
     /*Flag Register*/
     FlagRegister Flag_Register(.DataIn(EX_MEM_input[75:73]), .Buffer(Flags), .clk(clk), .reset(reset));
@@ -262,9 +257,6 @@ module Processor();
     .OUTPUT_PORT(OUTPUT_PORT_Output),
     .OUTPUT_PORT_Input(OUTPUT_PORT_Register),
 
-    /*Stack Pointer*/
-    .Stack_Pointer(Stack_Pointer),
-
     /*Outputs*/
     .MR_Out(EX_MEM_input[35]),
     .MW_Out(EX_MEM_input[36]),
@@ -280,9 +272,6 @@ module Processor();
     /*Flags Outputs*/
     /*NF|CF|ZF*/
     .Final_Flags(EX_MEM_input[75:73]),
-
-    /*Stack Pointer Out*/
-    .Stack_Pointer_Out(Stack_Pointer_Out),
 
     /*For Jumps*/
     .Taken_Jump(JMP), 
@@ -325,9 +314,9 @@ module Processor();
     integer count;
 
     initial begin
-        $monitor("IF/ID=%b,IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, Stack_Pointer=%d, JMP_Flag=%b, MEM_WB_Buffer = %b, Accumulated_PC=%d, Keep_Fetched_Instruction=%b",
-        IFIDBuffer,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EX_MEM_input[70],
-        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register,Stack_Pointer, JMP, MEMWBBuffer, Accumulated_PC, Keep_Fetched_Instruction
+        $monitor("IF/ID=%b,IOR=%b, IOW=%b, OPS=%b, ALU_OP=%b, ALU=%b, FD=%b, Data1=%d, Data2=%d, WB_Address=%b, MR=%b, MW=%b, WB=%b, JMP=%b, SP=%b, SPOP=%b, FGS=%b, PC=%d, JWSP=%b, SRC_Address=%b, Immediate=%b, Stack_PC=%b, Stack_Flags=%b, Data=%d, WB_Address_out=%b, MR_out=%b, MW_out=%b, WB_out=%b, Address=%d, JWSP_out=%b, Stack_PC_out=%b, Stack_Flags_out=%b, Final_Flags=%b, Flag Register=%b, OUTPUT_PORT=%d, JMP_Flag=%b, MEM_WB_Buffer = %b, Accumulated_PC=%d, Keep_Fetched_Instruction=%b",
+        IFIDBuffer,IDEXBuffer[0],IDEXBuffer[1],IDEXBuffer[2],IDEXBuffer[5:3],IDEXBuffer[6],IDEXBuffer[8:7],IDEXBuffer[24:9],IDEXBuffer[40:25],IDEXBuffer[43:41],IDEXBuffer[44],IDEXBuffer[45],IDEXBuffer[46],IDEXBuffer[47],IDEXBuffer[48],IDEXBuffer[49],IDEXBuffer[51:50],IDEXBuffer[83:52],IDEXBuffer[84],IDEXBuffer[87:85],IDEXBuffer[88],IDEXBuffer[89],IDEXBuffer[90],EXMEMBuffer[31:0],EXMEMBuffer[34:32],EXMEMBuffer[35],EXMEMBuffer[36],EXMEMBuffer[37],EXMEMBuffer[69:38],EXMEMBuffer[70],
+        EXMEMBuffer[71],EXMEMBuffer[72],EXMEMBuffer[75:73],Flags,OUTPUT_PORT_Register, JMP, MEMWBBuffer, Accumulated_PC, Keep_Fetched_Instruction
         );
         reset_ins=1'b1;
         INT=1'b0;
