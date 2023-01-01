@@ -17,12 +17,12 @@ module State_Machine (
     
 
     always @(negedge clk) begin
-        if(State_Reg==2'b00 && Stack_PC==1'b1 && Stack_Flags==1'b1)
+        if((State_Reg==2'b00 || State_Reg==2'b01) && Stack_PC==1'b1 && Stack_Flags==1'b1)
         begin
             State_Reg=2'b11;
             Stall_Signal=1'b1;
         end
-        else if(State_Reg==2'b00 && Stack_PC==1'b1 && Stack_Flags==1'b0)
+        else if((State_Reg==2'b00 || State_Reg==2'b01) && Stack_PC==1'b1 && Stack_Flags==1'b0)
         begin
             State_Reg=2'b10;
             Stall_Signal=1'b1;
@@ -58,7 +58,7 @@ module State_Machine (
         end
         else if(State_Reg== 2'b01)
         begin
-          
+            Stall_Signal=1'b0;
             State_Next=2'b00;
             State_Machine_Out= 2'b01;
               if(MR)
@@ -70,7 +70,6 @@ module State_Machine (
         end
         else
         begin
-            Stall_Signal=1'b0;
              State_Machine_Out= 2'b00;
              Machine_Stack=2'b00;
              State_Next = 2'b00;
