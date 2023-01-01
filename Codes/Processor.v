@@ -36,6 +36,7 @@
 1: IMM                                |  88
 1: Stack_PC                           |  89
 1: Stack_Flags                        |  90
+1: INT                                |  91
 */
 
 /*EX/MEM Buffer 78*/
@@ -83,6 +84,7 @@ module Processor();
     wire [31:0] Stack_Pointer_Out;
     wire JMP,To_PC_Selector;
     wire INT_OUT;
+    wire [31:0]Data_Out;
 
     wire [31:0] PC_OUT;
     reg [15:0] Instruction;
@@ -119,7 +121,8 @@ module Processor();
     reg reset_ins;
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]),.reset(reset_ins));
 
-    assign IF_ID_input[47:16]=(INT_OUT==1'b0)?PC_OUT+1:(INT_OUT==1'b1 && To_PC_Selector==1'b1)?({{16{1'b0}},Data_To_Use}):PC_OUT;
+    assign IF_ID_input[47:16]=(INT_OUT==1'b0)?PC_OUT+1:(INT_OUT==1'b1 && To_PC_Selector==1'b1)?({{16{1'b0}},Data_To_Use}):
+    (MemWSP==1'b1 && INT_OUT==1'b1)?Accumulated_PC:PC_OUT;//check this to khaled
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
@@ -155,6 +158,7 @@ module Processor();
     
     assign ID_EX_input[83:52]=(To_PC_Selector===1'b1 && IFIDBuffer[48]===1'b1)?({{16{1'b0}},Data_To_Use}):
     (IFIDBuffer[48]===1'b1 && IDEXBuffer[88])?IFIDBuffer[47:16]+1:
+    (IFIDBuffer[48]===1'b1 && MemWSP == 1'b1)?Accumulated_PC:
     IFIDBuffer[47:16];
     assign ID_EX_input[43:41]=IFIDBuffer[7:5];
     assign ID_EX_input[87:85]=IFIDBuffer[4:2];
@@ -269,7 +273,7 @@ module Processor();
     .Stack_PC_Out(EX_MEM_input[71]),
     .Stack_Flags_Out(EX_MEM_input[72]),
     .WB_Address_Out(EX_MEM_input[34:32]),
-    .Data(EX_MEM_input[31:0]),
+    .Data(Data_Out),
     .Address(EX_MEM_input[69:38]),
     .SP_Out(EX_MEM_input[76]),
     .SPOP_Out(EX_MEM_input[77]),
@@ -293,6 +297,8 @@ module Processor();
     /*data to pc*/
     .Data_To_Use(Data_To_Use)
 );
+
+    assign EX_MEM_input[31:0] = (MemWSP==1'b1 && IDEXBuffer[91] == 1'b1)? Accumulated_PC : Data_Out;
 
     /*EX/MEM Buffer*/
     EX_MEM EXMEM(.DataIn(EX_MEM_input), .Buffer(EXMEMBuffer), .clk(clk),.reset(reset), .flush(1'b0),.stall(Stall_Signal));
