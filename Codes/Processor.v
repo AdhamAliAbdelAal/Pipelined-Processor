@@ -153,7 +153,9 @@ module Processor();
         .JWSP(ID_EX_input[84])
         );
     
-    assign ID_EX_input[83:52]=(To_PC_Selector===1'b1 && IFIDBuffer[48]===1'b1)?({{16{1'b0}},Data_To_Use}):IFIDBuffer[47:16];
+    assign ID_EX_input[83:52]=(To_PC_Selector===1'b1 && IFIDBuffer[48]===1'b1)?({{16{1'b0}},Data_To_Use}):
+    (IFIDBuffer[48]===1'b1 && IDEXBuffer[88])?IFIDBuffer[47:16]+1:
+    IFIDBuffer[47:16];
     assign ID_EX_input[43:41]=IFIDBuffer[7:5];
     assign ID_EX_input[87:85]=IFIDBuffer[4:2];
     assign ID_EX_input[91] = IFIDBuffer[48];
