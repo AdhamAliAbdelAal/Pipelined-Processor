@@ -79,7 +79,7 @@ module Processor();
     wire [15:0] Forwarding_Unit_Data1, Forwarding_Unit_Data2;
     wire [2:0] Flags;
     wire JMP,To_PC_Selector;
-
+    wire INT_OUT;
 
     wire [31:0] PC_OUT;
     reg [15:0] Instruction;
@@ -104,7 +104,7 @@ module Processor();
     .clk(clk), 
     .PC_Out(PC_OUT), 
     .stall(Keep_PC|Stall_Signal),
-    .INT(IFIDBuffer[48]),
+    .INT(INT_OUT),
     .To_PC_Selector(To_PC_Selector),
     .MemWSP(MemWSP),
     .accPC(Accumulated_PC),
@@ -116,14 +116,14 @@ module Processor();
     reg reset_ins;
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]),.reset(reset_ins));
 
-    assign IF_ID_input[47:16]=(INT==1'b0)?PC_OUT+1:(INT==1'b1 && To_PC_Selector==1'b1)?({{16{1'b0}},Data_To_Use}):PC_OUT;
+    assign IF_ID_input[47:16]=(INT_OUT==1'b0)?PC_OUT+1:(INT_OUT==1'b1 && To_PC_Selector==1'b1)?({{16{1'b0}},Data_To_Use}):PC_OUT;
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
     assign stall_IF_ID = Keep_Fetched_Instruction|Stall_Signal;
     wire flush_IF_ID;
-    assign flush_IF_ID = (To_PC_Selector | EXMEMBuffer[70]) & !INT & !IDEXBuffer[91];
-    assign IF_ID_input[48]=INT;
+    assign flush_IF_ID = (To_PC_Selector | EX_MEM_input[70]) & !INT_OUT & !IDEXBuffer[91];
+    assign IF_ID_input[48]=INT_OUT;
     IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk), .reset(reset), .stall(stall_IF_ID),.flush(flush_IF_ID));
 
     /*Control Unit*/
@@ -150,7 +150,9 @@ module Processor();
         .JWSP(ID_EX_input[84])
         );
     
-    assign ID_EX_input[83:52]=(To_PC_Selector===1'b1 && IFIDBuffer[48]===1'b1)?({{16{1'b0}},Data_To_Use}):IFIDBuffer[47:16];
+    assign ID_EX_input[83:52]=(To_PC_Selector===1'b1 && IFIDBuffer[48]===1'b1)?({{16{1'b0}},Data_To_Use}):
+    (IFIDBuffer[48]===1'b1 && IDEXBuffer[88])?IFIDBuffer[47:16]+1:
+    IFIDBuffer[47:16];
     assign ID_EX_input[43:41]=IFIDBuffer[7:5];
     assign ID_EX_input[87:85]=IFIDBuffer[4:2];
     assign ID_EX_input[91] = IFIDBuffer[48];
@@ -164,6 +166,9 @@ module Processor();
          .Keep_PC(Keep_PC), 
          .Flush_MUX_Selector(Flush_MUX_Selector)
     );
+
+    /* Interrupt State Machine */
+    InterruptStateMachine ISM(.clk(clk),.INT_IN(INT),.Stall(Stall_Signal),.reset(reset),.INT_OUT(INT_OUT));
 
     /*Decoding Stage*/
     DecodingStage DECSTAGE (.write_back(MEMWBBuffer[19]), .read_data1(ID_EX_input[24:9]), .alu_input2(ID_EX_input[40:25]),  .write_data(MEMWBBuffer[15:0]), .clk(clk),.reset(reset),
@@ -191,7 +196,7 @@ module Processor();
     /*Output Port*/
     OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
     wire flush_ID_EX;
-    assign flush_ID_EX= (IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector | EXMEMBuffer[70]) & !IFIDBuffer[48];
+    assign flush_ID_EX= (IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector | EX_MEM_input[70]) & !IFIDBuffer[48];
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX),.stall(Stall_Signal));
 

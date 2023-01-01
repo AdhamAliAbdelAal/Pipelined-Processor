@@ -1,6 +1,6 @@
 .ORG 0
 IN R6
-ADD R2,R2
+ADD R5,R5
 RTI
 IN R5
 
