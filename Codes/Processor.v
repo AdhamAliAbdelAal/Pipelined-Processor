@@ -62,8 +62,8 @@ module Processor();
     wire [48:0] IF_ID_input;
     wire [48:0] IFIDBuffer;
 
-    wire [90:0] ID_EX_input;
-    wire [90:0] IDEXBuffer;
+    wire [91:0] ID_EX_input;
+    wire [91:0] IDEXBuffer;
 
     wire [77:0] EX_MEM_input;
     wire [77:0] EXMEMBuffer;
@@ -111,20 +111,21 @@ module Processor();
     .To_PC_Selector(To_PC_Selector),
     .MemWSP(MemWSP),
     .accPC(Accumulated_PC),
-    .Dst({{16{1'b0}},Data_To_Use})
+    .Dst({{16{1'b0}},Data_To_Use}),
+    .Still_INT(IDEXBuffer[91])
     );
 
     /*Instruction Memory*/
     reg reset_ins;
     Inst_Memory INSMEM(.PC_Address(PC_OUT),.OP_Code(Instruction),.Write_Address(Write_Address),.Write_Enable(Write_Enable),.Instruction( IF_ID_input[15:0]),.reset(reset_ins));
 
-    assign IF_ID_input[47:16]=(INT==1'b0)?PC_OUT+1:PC_OUT;
+    assign IF_ID_input[47:16]=(INT==1'b0)?PC_OUT+1:(INT==1'b1 && To_PC_Selector==1'b1)?({{16{1'b0}},Data_To_Use}):PC_OUT;
 
     /*IF/ID Buffer*/
     wire stall_IF_ID;
     assign stall_IF_ID = Keep_Fetched_Instruction|Stall_Signal;
     wire flush_IF_ID;
-    assign flush_IF_ID = To_PC_Selector | EXMEMBuffer[70];
+    assign flush_IF_ID = (To_PC_Selector | EXMEMBuffer[70]) & !INT & !IDEXBuffer[91];
     assign IF_ID_input[48]=INT;
     IF_ID IFID (.DataIn(IF_ID_input), .Buffer(IFIDBuffer), .clk(clk), .reset(reset), .stall(stall_IF_ID),.flush(flush_IF_ID));
 
@@ -152,9 +153,10 @@ module Processor();
         .JWSP(ID_EX_input[84])
         );
     
-    assign ID_EX_input[83:52]=IFIDBuffer[47:16];
+    assign ID_EX_input[83:52]=(To_PC_Selector===1'b1 && IFIDBuffer[48]===1'b1)?({{16{1'b0}},Data_To_Use}):IFIDBuffer[47:16];
     assign ID_EX_input[43:41]=IFIDBuffer[7:5];
     assign ID_EX_input[87:85]=IFIDBuffer[4:2];
+    assign ID_EX_input[91] = IFIDBuffer[48];
 
     Load_Use_Case Load_Use(
          .MR(IDEXBuffer[44]),
@@ -194,7 +196,7 @@ module Processor();
     /*Output Port*/
     OUTPUTPORT OUTPUT_PORT(.DataIn(OUTPUT_PORT_Output), .Buffer(OUTPUT_PORT_Register), .clk(clk),.reset(reset));
     wire flush_ID_EX;
-    assign flush_ID_EX=IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector | EXMEMBuffer[70];
+    assign flush_ID_EX= (IDEXBuffer[88]|Flush_MUX_Selector|To_PC_Selector | EXMEMBuffer[70]) & !IFIDBuffer[48];
     /*ID/EX Buffer*/
     ID_EX IDEX(.DataIn(ID_EX_input), .Buffer(IDEXBuffer), .clk(clk),.reset(reset),.flush(flush_ID_EX),.stall(Stall_Signal));
 
@@ -357,7 +359,7 @@ module Processor();
 
     always @(negedge clk)
     begin  
-        if(count==6)
+        if(count==8)
         begin
             INT=1'b1;
         end
