@@ -32,7 +32,7 @@ module ID_EX(
     input clk,reset,flush,stall;
     output reg [91:0] Buffer;
     always @(posedge clk) begin
-        if(reset==1'b1||flush==1'b1)
+        if(reset==1'b1||(flush==1'b1 && stall ===1'b0))
             Buffer=92'b0;
         else if (stall===1'b0)
             Buffer = DataIn;
