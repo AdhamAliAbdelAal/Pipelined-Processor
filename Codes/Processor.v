@@ -111,7 +111,7 @@ module Processor();
     .MemWSP(MemWSP),
     .accPC(Accumulated_PC),
     .Dst({{16{1'b0}},Data_To_Use}),
-    .Still_INT(IDEXBuffer[91])
+    .Still_INT(IDEXBuffer[91]||IFIDBuffer[48])
     );
 
     /*Instruction Memory*/
@@ -168,7 +168,8 @@ module Processor();
          .DEC_Src2(IFIDBuffer[7:5]), 
          .Keep_Fetched_Instruction(Keep_Fetched_Instruction), 
          .Keep_PC(Keep_PC), 
-         .Flush_MUX_Selector(Flush_MUX_Selector)
+         .Flush_MUX_Selector(Flush_MUX_Selector),
+         .JWSP(IDEXBuffer[84])
     );
 
     /* Interrupt State Machine */
@@ -359,7 +360,7 @@ module Processor();
 
     always @(negedge clk)
     begin  
-        if(count==9)
+        if(count==9 || count == 20)
         begin
             INT=1'b1;
         end
