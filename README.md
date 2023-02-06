@@ -193,20 +193,20 @@ Instructions (some instructions will occupy more than one memory location)
 <td align="center" colspan="2">👆 One Operand</td>
 </tr>
 <tr>
-<td>NOP</td>
+<td>🔶 NOP</td>
 <td>PC ← PC + 1</td>
 </tr>
 <tr>
-<td>SETC</td>
+<td>🔷 SETC</td>
 <td>C ← 1</td>
 </tr>
 <tr>
-<td>CLRC</td>
+<td>🔶 CLRC</td>
 <td>C ← 0</td>
 </tr>
 </tr>
 <tr>
-<td>NOT Rdst</td>
+<td>🔷 NOT Rdst</td>
 <td>
 <p>NOT value stored in register Rdst</p>
 <p>R[ Rdst ] ← 1’s Complement(R[ Rdst ])</p>
@@ -215,7 +215,7 @@ Instructions (some instructions will occupy more than one memory location)
 </td>
 </tr>
 <tr>
-<td>INC Rdst</td>
+<td>🔶 INC Rdst</td>
 <td>
 <p>Increment value stored in Rdst</p>
 <p>R[ Rdst ] ←R[ Rdst ] + 1</p>
@@ -224,7 +224,7 @@ Instructions (some instructions will occupy more than one memory location)
 </td>
 </tr>
 <tr>
-<td>DEC Rdst</td>
+<td>🔷 DEC Rdst</td>
 <td>
 <p>Decrement value stored in Rdst</p>
 <p>R[ Rdst ] ←R[ Rdst ] – 1</p>
@@ -233,12 +233,36 @@ Instructions (some instructions will occupy more than one memory location)
 </td>
 </tr>
 <tr>
-<td>OUT Rdst</td>
+<td>🔶 OUT Rdst</td>
 <td>OUT.PORT ← R[ Rdst ]</td>
 </tr>
 <tr>
-<td>IN Rdst</td>
+<td>🔷 IN Rdst</td>
 <td>R[ Rdst ] ←IN.PORT</td>
+</tr>
+</tr>
+<tr>
+<td align="center" colspan="2">✌️ Two Operand</td>
+</tr>
+<tr>
+<td>🔷 MOV Rsrc, Rdst</td>
+<td>Move value from register Rsrc to register Rdst</td>
+</tr>
+<tr>
+<td>🔶 ADD Rsrc, Rdst</td>
+<td>
+<p>Add the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
+<p>If the result =0 then Z ←1; else: Z ←0;</p>
+<p>If the result less than 0 then N ←1; else: N ←0 </p>
+</td>
+</tr>
+<tr>
+<td>🔷 SUB Rsrc, Rdst</td>
+<td>
+<p>Add the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
+<p>If the result =0 then Z ←1; else: Z ←0;</p>
+<p>If the result less than 0 then N ←1; else: N ←0 </p>
+</td>
 </tr>
 </tr>
 </table>
