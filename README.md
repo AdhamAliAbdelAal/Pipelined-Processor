@@ -187,7 +187,7 @@ Instructions (some instructions will occupy more than one memory location)
 <br>
 <table align="center">
 <tr  align="center">
-<th  align="center">Mnemonic</th>
+<th  width="20%" align="center">Mnemonic</th>
 <td  align="center"><strong>Function</strong></td>
 </tr>
 <tr>
