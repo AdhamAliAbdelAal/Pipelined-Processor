@@ -416,8 +416,23 @@ M[Rdst] ←R[Rsrc]; </td>
 <br>
 <img src="https://user-images.githubusercontent.com/71986226/217028542-2a6abadc-a5fb-40c0-a74c-c4f42997354d.png">
 </div>
-<li><a href="https://github.com/AdhamAliAbdelAal/Pipelined-Processor/blob/master/Docs/opCode.xlsx">OP Code</a></li>
-<li><a>Control Unit Signals Output</a></li>
+<div align="center"  ><hr width="60%">
+</div>
+<li><a href="https://github.com/AdhamAliAbdelAal/Pipelined-Processor/blob/master/Docs/opCode.xlsx">OP Code</a>
+
+<div>
+<br>
+<img src="https://user-images.githubusercontent.com/71986226/217029995-22b4625e-0dad-4122-a96b-d8bc0ca35c0a.png">
+<div align="center"  ><hr width="60%">
+</div>
+</div>
+</li>
+<li><a href="https://github.com/AdhamAliAbdelAal/Pipelined-Processor/blob/master/Docs/outputCU.xlsx">Output Signals from Control Unit  </a>
+<div>
+<br>
+<img src="https://user-images.githubusercontent.com/71986226/217030356-2925f5da-42c0-49e0-8947-4e6bc0100107.png">
+</div>
+</li>
 </ul>
 
 <hr style="background-color: #4b4c60"></hr>
