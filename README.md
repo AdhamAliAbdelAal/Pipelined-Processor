@@ -191,7 +191,7 @@ Instructions (some instructions will occupy more than one memory location)
 <td  align="center"><strong>Function</strong></td>
 </tr>
 <tr>
-<td align="center" colspan="2" height="50"><strong>👆 One Operand</strong></td>
+<td align="center" colspan="2" height="70"><strong>👆 One Operand</strong></td>
 </tr>
 <tr>
 <td>🔶 NOP</td>
@@ -249,7 +249,7 @@ Instructions (some instructions will occupy more than one memory location)
 </tr>
 </tr>
 <tr>
-<td align="center" colspan="2" height="50"><strong>✌️ Two Operand</strong></td>
+<td align="center" colspan="2" height="70"><strong>✌️ Two Operand</strong></td>
 </tr>
 <tr>
 <td>🔷 MOV Rsrc, Rdst</td>
@@ -313,7 +313,7 @@ Don’t forget to update carry</strong></p>
 </td>
 </tr>
 <tr>
-<td align="center" colspan="2" height="50"><strong>💾 Memory Operations</strong></td>
+<td align="center" colspan="2" height="70"><strong>💾 Memory Operations</strong></td>
 </tr>
 <tr>
 <td>🔶 PUSH Rdst </td>
@@ -340,7 +340,7 @@ R[ Rdst ] ← M[Rsrc]; </td>
 M[Rdst] ←R[Rsrc]; </td>
 </tr>
 <tr>
-<td align="center" colspan="2" height="50"><strong>🦘 Branch and Change of Control Operations</strong></td>
+<td align="center" colspan="2" height="70"><strong>🦘 Branch and Change of Control Operations</strong></td>
 <tr>
 <td>🔷 JZ Rdst </td>
 <td>
@@ -390,7 +390,7 @@ M[Rdst] ←R[Rsrc]; </td>
 <td>sp+2; PC ← X[SP]; Flags restored</td>
 </tr>
 <tr>
-<td align="center" colspan="2" height="50"><strong>💻 Input Signals</strong></td>
+<td align="center" colspan="2" height="70"><strong>💻 Input Signals</strong></td>
 </tr>
 <tr>
 <td>🔶 Reset </td>
