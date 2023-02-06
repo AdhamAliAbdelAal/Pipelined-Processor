@@ -187,10 +187,10 @@ Instructions (some instructions will occupy more than one memory location)
 <table align="center">
 <tr  align="center">
 <th  align="center">Mnemonic</th>
-<th  align="center">Function</th>
+<td  align="center"><strong>Function</strong></td>
 </tr>
 <tr>
-<td align="center" colspan="2">👆 One Operand</td>
+<td align="center" colspan="2" height="50"><strong>👆 One Operand</strong></td>
 </tr>
 <tr>
 <td>🔶 NOP</td>
@@ -242,7 +242,7 @@ Instructions (some instructions will occupy more than one memory location)
 </tr>
 </tr>
 <tr>
-<td align="center" colspan="2">✌️ Two Operand</td>
+<td align="center" colspan="2" height="50"><strong>✌️ Two Operand</strong></td>
 </tr>
 <tr>
 <td>🔷 MOV Rsrc, Rdst</td>
@@ -259,9 +259,42 @@ Instructions (some instructions will occupy more than one memory location)
 <tr>
 <td>🔷 SUB Rsrc, Rdst</td>
 <td>
-<p>Add the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
+<p>Subtract the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
 <p>If the result =0 then Z ←1; else: Z ←0;</p>
 <p>If the result less than 0 then N ←1; else: N ←0 </p>
+</td>
+</tr>
+<tr>
+<td>🔶 AND Rsrc, Rdst</td>
+<td>
+<p>AND the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
+<p>If the result =0 then Z ←1; else: Z ←0;</p>
+<p>If the result less than 0 then N ←1; else: N ←0 </p>
+</td>
+</tr>
+<tr>
+<td>🔷 OR Rsrc, Rdst</td>
+<td>
+<p>OR the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
+<p>If the result =0 then Z ←1; else: Z ←0;</p>
+<p>If the result less than 0 then N ←1; else: N ←0 ;</p>
+</td>
+</tr>
+</tr>
+<tr>
+<td>🔶 SHL Rsrc, Imm </td>
+<td>
+<p>Shift left Rsrc by #Imm bits and store result in same register
+<strong>
+Don’t forget to update carry</strong></p>
+</td>
+</tr>
+<tr>
+<td>🔷 SHL Rsrc, Imm </td>
+<td>
+<p>Shift right Rsrc by #Imm bits and store result in same register
+<strong>Don’t forget to update carry</strong>
+</p>
 </td>
 </tr>
 </tr>
