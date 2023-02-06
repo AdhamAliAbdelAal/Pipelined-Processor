@@ -208,28 +208,34 @@ Instructions (some instructions will occupy more than one memory location)
 <tr>
 <td>🔷 NOT Rdst</td>
 <td>
-<p>NOT value stored in register Rdst</p>
-<p>R[ Rdst ] ← 1’s Complement(R[ Rdst ])</p>
-<p>If (1’s Complement(R[ Rdst ]) = 0): Z ←1; else: Z ←0</p>
-<p>If (1’s Complement(R[ Rdst ]) < 0): N ←1; else: N ←0</p>
+<ul>
+<li>NOT value stored in register Rdst</li>
+<li>R[ Rdst ] ← 1’s Complement(R[ Rdst ])</li>
+<li>If (1’s Complement(R[ Rdst ]) = 0): Z ←1; else: Z ←0</li>
+<li>If (1’s Complement(R[ Rdst ]) < 0): N ←1; else: N ←0</p>
+</ul>
 </td>
 </tr>
 <tr>
 <td>🔶 INC Rdst</td>
 <td>
-<p>Increment value stored in Rdst</p>
-<p>R[ Rdst ] ←R[ Rdst ] + 1</p>
-<p>If ((R[ Rdst ] + 1) = 0): Z ←1; else: Z ←0</p>
-<p>If ((R[ Rdst ] + 1) < 0): N ←1; else: N ←0</p>
+<ul>
+<li>Increment value stored in Rdst</li>
+<li>R[ Rdst ] ←R[ Rdst ] + 1</li>
+<li>If ((R[ Rdst ] + 1) = 0): Z ←1; else: Z ←0</li>
+<li>If ((R[ Rdst ] + 1) < 0): N ←1; else: N ←0</li>
+</ul>
 </td>
 </tr>
 <tr>
 <td>🔷 DEC Rdst</td>
 <td>
-<p>Decrement value stored in Rdst</p>
-<p>R[ Rdst ] ←R[ Rdst ] – 1</p>
-<p>If ((R[ Rdst ] - 1) = 0): Z ←1; else: Z ←0</p>
-<p>If ((R[ Rdst ] - 1) < 0): N ←1; else: N ←0</p>
+<ul>
+<li>Decrement value stored in Rdst</li>
+<li>R[ Rdst ] ←R[ Rdst ] – 1</li>
+<li>If ((R[ Rdst ] - 1) = 0): Z ←1; else: Z ←0</li>
+<li>If ((R[ Rdst ] - 1) < 0): N ←1; else: N ←0</li>
+</ul>
 </td>
 </tr>
 <tr>
@@ -251,33 +257,41 @@ Instructions (some instructions will occupy more than one memory location)
 <tr>
 <td>🔶 ADD Rsrc, Rdst</td>
 <td>
-<p>Add the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
-<p>If the result =0 then Z ←1; else: Z ←0;</p>
-<p>If the result less than 0 then N ←1; else: N ←0 </p>
+<ul>
+<li>Add the values stored in registers Rsrc, Rdst and store the result in Rdst</li>
+<li>If the result =0 then Z ←1; else: Z ←0;</li>
+<li>If the result less than 0 then N ←1; else: N ←0 </li>
+</ul>
 </td>
 </tr>
 <tr>
 <td>🔷 SUB Rsrc, Rdst</td>
 <td>
-<p>Subtract the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
-<p>If the result =0 then Z ←1; else: Z ←0;</p>
-<p>If the result less than 0 then N ←1; else: N ←0 </p>
+<ul>
+<li>Subtract the values stored in registers Rsrc, Rdst and store the result in Rdst</li>
+<li>If the result =0 then Z ←1; else: Z ←0;</li>
+<li>If the result less than 0 then N ←1; else: N ←0 </li>
+</ul>
 </td>
 </tr>
 <tr>
 <td>🔶 AND Rsrc, Rdst</td>
 <td>
-<p>AND the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
-<p>If the result =0 then Z ←1; else: Z ←0;</p>
-<p>If the result less than 0 then N ←1; else: N ←0 </p>
+<ul>
+<li>AND the values stored in registers Rsrc, Rdst and store the result in Rdst</li>
+<li>If the result =0 then Z ←1; else: Z ←0;</li>
+<li>If the result less than 0 then N ←1; else: N ←0 </li>
+</ul>
 </td>
 </tr>
 <tr>
 <td>🔷 OR Rsrc, Rdst</td>
 <td>
-<p>OR the values stored in registers Rsrc, Rdst and store the result in Rdst</p>
-<p>If the result =0 then Z ←1; else: Z ←0;</p>
-<p>If the result less than 0 then N ←1; else: N ←0 ;</p>
+<ul>
+<li>OR the values stored in registers Rsrc, Rdst and store the result in Rdst</li>
+<li>If the result =0 then Z ←1; else: Z ←0;</li>
+<li>If the result less than 0 then N ←1; else: N ←0 ;</li>
+</ul>
 </td>
 </tr>
 </tr>
@@ -297,6 +311,94 @@ Don’t forget to update carry</strong></p>
 </p>
 </td>
 </tr>
+<tr>
+<td align="center" colspan="2" height="50"><strong>💾 Memory Operations</strong></td>
+</tr>
+<tr>
+<td>🔶 PUSH Rdst </td>
+<td>X[SP--] ← R[ Rdst ]</td>
+</tr>
+<tr>
+<td>🔷 POP Rdst </td>
+<td>R[ Rdst ] ← X[++SP]</td>
+</tr>
+<tr>
+<td>🔶 LDM Rdst, Imm </td>
+<td>Load immediate value (15 bit) to register Rdst
+R[ Rdst ] ← Imm<15:0>
+</td>
+</tr>
+<tr>
+<td>🔷 LDD Rsrc, Rdst </td>
+<td>Load value from memory address Rdst to register Rdst
+R[ Rdst ] ← M[Rsrc]; </td>
+</tr>
+<tr>
+<td>🔶 STD Rsrc, Rdst </td>
+<td>Store value in register Rsrc to memory location Rdst
+M[Rdst] ←R[Rsrc]; </td>
+</tr>
+<tr>
+<td align="center" colspan="2" height="50"><strong>🦘 Branch and Change of Control Operations</strong></td>
+<tr>
+<td>🔷 JZ Rdst </td>
+<td>
+<ul>
+<li>Jump if zero</li>
+<li>If (Z=1): PC ←R[ Rdst ]; (Z=0)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>🔶 JN Rdst  </td>
+<td>
+<ul>
+<li>Jump if negative</li>
+<li>If (N=1): PC ←R[ Rdst ]; (N=0)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>🔷 JC Rdst </td>
+<td>
+<ul>
+<li>Jump if negative</li>
+<li>If (C=1): PC ←R[ Rdst ]; (C=0)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>🔶 JMP Rdst</td>
+<td>
+<ul>
+<li>Jump</li>
+<li>PC ←R[ Rdst ]</li>
+<ul>
+</td>
+</tr>
+<tr>
+<td>🔷 CALL Rdst </td>
+<td>(X[SP] ← PC + 1; sp-2; PC ← R[ Rdst ]) </td>
+</tr>
+<tr>
+<td>🔶 RET </td>
+<td>sp+2, PC ←X[SP]</td>
+</tr>
+<tr>
+<td>🔷 RTI  </td>
+<td>sp+2; PC ← X[SP]; Flags restored</td>
+</tr>
+<tr>
+<td align="center" colspan="2" height="50"><strong>💻 Input Signals</strong></td>
+</tr>
+<tr>
+<td>🔶 Reset </td>
+<td>PC ←2
+5h //memory location of the first instruction</td>
+</tr>
+<tr>
+<td>🔷 Interrupt  </td>
+<td>X[Sp]←PC; sp-2;PC ← 0; Flags preserved</td>
 </tr>
 </table>
 </ul>
